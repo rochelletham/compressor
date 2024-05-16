@@ -1,5 +1,6 @@
 const input = document.querySelector("audio");
 const pre = document.querySelector("pre");
+//  was used for inital testing
 const compressButton = document.querySelector('#compressButton');
 const thresholdButton = document.querySelector('#thresholdButton');
 const kneeButton = document.querySelector('#kneeButton');
@@ -7,6 +8,26 @@ const ratioButton = document.querySelector('#ratioButton');
 const attackButton = document.querySelector('#attackButton');
 const releaseButton = document.querySelector('#releaseButton');
 const hintButton = document.querySelector('#hintButton');
+
+var attackSlider = document.getElementById("attack");
+var thresholdSlider = document.getElementById("threshold");
+var kneeSlider = document.getElementById("knee");
+var ratioSlider = document.getElementById("ratio");
+var releaseSlider = document.getElementById("release");
+
+var thresholdVal = -24; 
+var kneeVal = 30;
+var ratioVal = 12;
+var attackVal = 0.003;
+var releaseVal = 0.25;
+// setting the intial values
+attackSlider.innerHTML = attackVal;
+kneeSlider.innerHTML = kneeVal;
+thresholdSlider.innerHTML = thresholdVal;
+ratioSlider.innerHTML = ratioVal;
+releaseSlider.innerHTML = releaseVal;
+
+
 let context;
 
 hintButton.onclick = function(){
@@ -19,11 +40,11 @@ checkButton.onclick = function(){
 input.addEventListener("play", () => {
     // https://webaudio.github.io/web-audio-api/#DynamicsCompressorNode
     // https://developer.mozilla.org/en-US/docs/Web/API/DynamicsCompressorNode/DynamicsCompressorNode
-    var thresholdVal = -24; 
-    var kneeVal = 30;
-    var ratioVal = 12;
-    var attckVal = 0.003;
-    var releaseVal = 0.25;
+    // var thresholdVal = -24; 
+    // var kneeVal = 30;
+    // var ratioVal = 12;
+    // var attckVal = 0.003;
+    // var releaseVal = 0.25;
 if (!context) {
    context = new AudioContext();
 
@@ -36,7 +57,7 @@ if (!context) {
         threshold: thresholdVal,
         knee: kneeVal,
         ratio: ratioVal,
-        attack: attckVal,
+        attack: attackVal,
         release: releaseVal,
     });
 
@@ -47,6 +68,7 @@ if (!context) {
         if (active === "false") {
             compressButton.setAttribute("data-active", "true");
             compressButton.textContent = "Remove compression";
+            console.log("Added compressor node");
             // compressor node inside node chain
             source.disconnect(context.destination);
             source.connect(compressor);
@@ -54,13 +76,13 @@ if (!context) {
         } else if (active === "true") {
             compressButton.setAttribute("data-active", "false");
             compressButton.textContent = "Enable compression";
-            console.log("Added in compressor node!");
             // compressor node taken out of node chain
             source.disconnect(compressor);
             compressor.disconnect(context.destination);
             source.connect(context.destination);
         }
     };
+    // used for initial testing
     thresholdButton.onclick = () => {
         console.log("clicked threshold button");
         updateParam(thresholdButton, compressor.threshold);
@@ -82,6 +104,27 @@ if (!context) {
         updateParam(releaseButton, compressor.release);
     };
 
+    attackSlider.oninput = function() {
+        attackVal.innerHTML = this.value;
+        updateParam(attackSlider, compressor.attack);
+    };
+    thresholdSlider.oninput = function() {
+        thresholdVal.innerHTML = this.value;
+        updateParam(thresholdSlider, compressor.threshold);
+    };
+    kneeSlider.oninput = function() {
+        kneeVal.innerHTML = this.value;
+        updateParam(kneeSlider, compressor.knee);
+    };
+    ratioSlider.oninput = function() {
+        ratioVal.innerHTML = this.value;
+        updateParam(ratioSlider, compressor.ratio);
+    };
+    releaseSlider.oninput = function() {
+        releaseVal.innerHTML = this.value;
+        updateParam(releaseSlider, compressor.release);
+    };
+
         /**
          * 
          * @param {object} button - button for specific parameter
@@ -95,20 +138,20 @@ if (!context) {
          * 
          */
         function updateParam(button, param) {
-            const active = button.getAttribute("data-active");
+            // const active = button.getAttribute("data-active");
             // only change param val if compressor is active
             if (compressButton.getAttribute("data-active") === "true") {
-                if (active === "false") {
-                    button.setAttribute("data-active", "true");
-                    button.textContent = "Go to default";
-                    param.setValueAtTime(0, context.currentTime);
-                    console.log(param.value);
-                } else if (active === "true") {
-                    button.setAttribute("data-active", "false");
-                    button.textContent = "Apply update";
-                    param.setValueAtTime( 10, context.currentTime);
-                    console.log(param.value);
-                }
+                // if (active === "false") {
+                //     button.setAttribute("data-active", "true");
+                //     button.textContent = "Go to default";
+                //     param.setValueAtTime(0, context.currentTime);
+                //     console.log(param.value);
+                // } else if (active === "true") {
+                // button.setAttribute("data-active", "false");
+                button.textContent = "Apply update";
+                param.setValueAtTime(button.innerHTML, context.currentTime);
+                console.log(button.id, ": ", param.value);
+                // }
             } else {
                 alert("Need to click 'enable compression' first!");
             }
