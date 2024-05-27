@@ -39,10 +39,6 @@
   margin-top: 45%;
   position: relative;
   align-items: center;
-  /* makes the slider vertical */
-  appearance: slider-vertical;
-  -moz-appearance: slider-vertical;
-  -webkit-appearance: slider-vertical;
   min-height: 250px;
   /* height: 50%; */
   border-radius: 5px;  

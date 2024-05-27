@@ -2,12 +2,12 @@ const input = document.querySelector("audio");
 const pre = document.querySelector("pre");
 //  was used for inital testing
 const compressButton = document.querySelector('#compressButton');
-const thresholdButton = document.querySelector('#thresholdButton');
-const kneeButton = document.querySelector('#kneeButton');
-const ratioButton = document.querySelector('#ratioButton');
-const attackButton = document.querySelector('#attackButton');
-const releaseButton = document.querySelector('#releaseButton');
-const hintButton = document.querySelector('#hintButton');
+// const thresholdButton = document.querySelector('#thresholdButton');
+// const kneeButton = document.querySelector('#kneeButton');
+// const ratioButton = document.querySelector('#ratioButton');
+// const attackButton = document.querySelector('#attackButton');
+// const releaseButton = document.querySelector('#releaseButton');
+// const hintButton = document.querySelector('#hintButton');
 
 var attackSlider = document.getElementById("attack");
 var thresholdSlider = document.getElementById("threshold");
@@ -83,46 +83,46 @@ if (!context) {
         }
     };
     // used for initial testing
-    thresholdButton.onclick = () => {
-        console.log("clicked threshold button");
-        updateParam(thresholdButton, compressor.threshold);
-    };
-    kneeButton.onclick = () => {
-        console.log("clicked knee button");
-        updateParam(kneeButton, compressor.knee);
-    };
-    ratioButton.onclick = () => {
-        console.log("clicked ratio button");
-        updateParam(ratioButton, compressor.ratio);
-    };
-    attackButton.onclick = () => {
-        console.log("clicked attack button");
-        updateParam(attackButton, compressor.attack);
-    };
-    releaseButton.onclick = () => {
-        console.log("clicked release button");
-        updateParam(releaseButton, compressor.release);
-    };
+    // thresholdButton.onclick = () => {
+    //     console.log("clicked threshold button");
+    //     updateParam(this.value, thresholdButton, compressor.threshold);
+    // };
+    // kneeButton.onclick = () => {
+    //     console.log("clicked knee button");
+    //     updateParam(this.value, kneeButton, compressor.knee);
+    // };
+    // ratioButton.onclick = () => {
+    //     console.log("clicked ratio button");
+    //     updateParam(this.value, ratioButton, compressor.ratio);
+    // };
+    // attackButton.onclick = () => {
+    //     console.log("clicked attack button");
+    //     updateParam(this.value, attackButton, compressor.attack);
+    // };
+    // releaseButton.onclick = () => {
+    //     console.log("clicked release button");
+    //     updateParam(this.value, releaseButton, compressor.release);
+    // };
 
     attackSlider.oninput = function() {
         attackVal.innerHTML = this.value;
-        updateParam(attackSlider, compressor.attack);
+        updateParam(this.value, attackSlider, compressor.attack);
     };
     thresholdSlider.oninput = function() {
         thresholdVal.innerHTML = this.value;
-        updateParam(thresholdSlider, compressor.threshold);
+        updateParam(this.value, thresholdSlider, compressor.threshold);
     };
     kneeSlider.oninput = function() {
         kneeVal.innerHTML = this.value;
-        updateParam(kneeSlider, compressor.knee);
+        updateParam(this.value, kneeSlider, compressor.knee);
     };
     ratioSlider.oninput = function() {
         ratioVal.innerHTML = this.value;
-        updateParam(ratioSlider, compressor.ratio);
+        updateParam(this.value, ratioSlider, compressor.ratio);
     };
     releaseSlider.oninput = function() {
         releaseVal.innerHTML = this.value;
-        updateParam(releaseSlider, compressor.release);
+        updateParam(this.value, releaseSlider, compressor.release);
     };
 
         /**
@@ -137,7 +137,7 @@ if (!context) {
          * release: [0,1], 0.25
          * 
          */
-        function updateParam(button, param) {
+        function updateParam(val, button, param) {
             // const active = button.getAttribute("data-active");
             // only change param val if compressor is active
             if (compressButton.getAttribute("data-active") === "true") {
@@ -149,7 +149,8 @@ if (!context) {
                 // } else if (active === "true") {
                 // button.setAttribute("data-active", "false");
                 button.textContent = "Apply update";
-                param.setValueAtTime(button.innerHTML, context.currentTime);
+                // param.setValueAtTime(button.innerHTML, context.currentTime);
+                param.setValueAtTime(val, context.currentTime);
                 console.log(button.id, ": ", param.value);
                 // }
             } else {
