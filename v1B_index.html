@@ -60,11 +60,13 @@
       <div class="card card-body" style="width: 75%; margin-bottom: 15px;">
         Change the slider parameters to match the input audio with the expected audio! When you're done changing the parameters, feel free to click the check 
         to review your submission. 
+        <br>
+        Audio file: Instrumental by Rochelle T.
       </div>
     </div>
   
     <div class="d-flex flex=row" style=" width: 75%;">
-      <!-- Input <button onclick="" id="inputAudioButton" data-active="false" id="inputAudio"><img src="images/Sound on.png" alt="Input Audio"></button> -->
+      Input <button onclick="" id="inputAudioButton" data-active="false" id="inputAudio"><img src="images/Sound on.png" alt="Input Audio"></button>
       <h6 style="margin-left: 0%; margin-top: 15px; margin-right: 10px;font-weight: normal;">Input</h6>
       <audio crossorigin="anonymous" controls>
         <source src="instrumental_finalmix1.2.wav" type="audio/mpeg" />
@@ -86,14 +88,17 @@
     </div>
     <div class="container" id="effect-bk">
       <!-- INPUT VOLUME SECTION class=col-sm-13 col-md-13 VolCol-->
-        <div class="vol-col" id="input-vol" style="background-color: lightblue;">
-          <label for="input-vol" class="vol-col-label">Input Volume</label>
+        <div class="vol-col" id="input-vol" style="background-color: lightblue;
+        align-items: center;">
+          <div style="display: inline-block; text-align: center;max-width:100px">
+            <meter style="display: inline-block;"id="input-vol-meter-left" high="0.7" max="1" value="0"></meter>
+            <!-- TODO: add splitting node to have left and right channels -->
+            <!-- <meter style="display: inline-block;"id="input-vol-meter-rt" high="0.5" max="1" value=".5"></meter> -->
+          
+          <label for="input-vol" class="vol-col-label" style="vertical-align: bottom;">Input Volume</label>
         </div>
-<!-- var thresholdVal = -24; 
-var kneeVal = 30;
-var ratioVal = 12;
-var attackVal = 0.003;
-var releaseVal = 0.25; -->
+        </div>
+        
         <div class="efx-col" style="background-color: rgb(131, 219, 141);">
           <input type="range" style="writing-mode: vertical-lr" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" />
           <label for="threshold" style="">Threshold</label>
@@ -117,7 +122,13 @@ var releaseVal = 0.25; -->
           <label for="release">Release</label>
         </div>
         <div class="vol-col" id="output-vol" style="background-color: lightblue;">
-          <label for="output-vol" class="vol-col-label">Output Volume</label>
+          <div style="display: inline-block; text-align: center;max-width:100px">
+            <meter style="display: inline-block;"id="output-vol-meter" high="0.7" max="1" value="0"></meter>
+            <!-- TODO: left and right channel meters -->
+            <!-- <meter style="display: inline-block;"id="input-vol-meter" high="0.5" max="1" value=".5"></meter> -->
+          
+          <label for="output-vol" class="vol-col-label" style="vertical-align: bottom;">Output Volume</label>
+        </div>
         </div>
     
   </div>
@@ -140,15 +151,7 @@ var releaseVal = 0.25; -->
   <!-- mouse/touch events from jherrm --> 
   <script type="text/javascript" src="asset/ui.js"></script>
   <script type="text/javascript" src="asset/knob_helper.js"></script>
-
-
-  <!-- <script type="text/javascript">
-
-    ['position-css-knob', 'position-css-knob2','position-css-knob3',
-    'position-css-knob4', 'position-css-knob5'].map((name) => {
-        KnobHelper.createKnobCSS(document.getElementById(name), name)
-    })
-    </script> -->
+  
 </body>
 
 </html>

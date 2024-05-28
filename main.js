@@ -2,12 +2,11 @@ const input = document.querySelector("audio");
 const pre = document.querySelector("pre");
 //  was used for inital testing
 const compressButton = document.querySelector('#compressButton');
-// const thresholdButton = document.querySelector('#thresholdButton');
-// const kneeButton = document.querySelector('#kneeButton');
-// const ratioButton = document.querySelector('#ratioButton');
-// const attackButton = document.querySelector('#attackButton');
-// const releaseButton = document.querySelector('#releaseButton');
-// const hintButton = document.querySelector('#hintButton');
+
+var inputLeftMeter = document.getElementById("input-vol-meter-left")
+// var inputRtMeter = document.getElementById("input-vol-meter-rt")
+var outputLeftMeter = document.getElementById("output-vol-meter-left")
+// var outputRtMeter = document.getElementById("output-vol-meter-rt")
 
 var attackSlider = document.getElementById("attack");
 var thresholdSlider = document.getElementById("threshold");
@@ -34,8 +33,10 @@ hintButton.onclick = function(){
     alert("Clicked hint!");
 };
 checkButton.onclick = function(){
-    alert("Clicked check!");
+    
+    
 };
+
 // only will run audio context code when input audio is in play state
 input.addEventListener("play", () => {
     // https://webaudio.github.io/web-audio-api/#DynamicsCompressorNode
@@ -51,6 +52,27 @@ if (!context) {
     // Create a MediaElementAudioSourceNode
     // Feed the HTMLMediaElement into it
     const source = context.createMediaElementSource(input);
+    // used for analysing the input volume levels
+    const inputAnalyser = context.createAnalyser();
+    source.connect(inputAnalyser);
+
+    // used for analysing the input volume levels
+    // const outputAnalyser = context.createAnalyser();
+    
+    inputLeftMeter = document.getElementById("input-vol-meter-left")
+    const pcmData = new Float32Array(inputAnalyser.fftSize);
+    const onInputFrame = () => {
+        inputAnalyser.getFloatTimeDomainData(pcmData);
+        let sumSquares = 0.0;
+        for (const amplitude of pcmData) { 
+            sumSquares += amplitude*amplitude; 
+        }
+        inputLeftMeter.value = Math.sqrt(sumSquares / pcmData.length) * 2;
+        console.log(inputLeftMeter.value)
+        window.requestAnimationFrame(onInputFrame);
+    };
+    window.requestAnimationFrame(onInputFrame);
+
 
     // Create a compressor node
     const compressor = new DynamicsCompressorNode(context, {
@@ -61,8 +83,14 @@ if (!context) {
         release: releaseVal,
     });
 
+    
+
     // connect the AudioBufferSourceNode to the destination
-    source.connect(context.destination);   
+    inputAnalyser.connect(context.destination);   
+    inputAnalyser.smoothingTimeConstant = 0.3;
+    
+    
+
     compressButton.onclick = () => {
         const active = compressButton.getAttribute("data-active");
         if (active === "false") {
@@ -70,40 +98,21 @@ if (!context) {
             compressButton.textContent = "Remove compression";
             console.log("Added compressor node");
             // compressor node inside node chain
-            source.disconnect(context.destination);
-            source.connect(compressor);
+            inputAnalyser.disconnect(context.destination);
+            inputAnalyser.connect(compressor);
             compressor.connect(context.destination);
+            
         } else if (active === "true") {
             compressButton.setAttribute("data-active", "false");
             compressButton.textContent = "Enable compression";
             // compressor node taken out of node chain
-            source.disconnect(compressor);
+            inputAnalyser.disconnect(compressor);
             compressor.disconnect(context.destination);
-            source.connect(context.destination);
+            inputAnalyser.connect(context.destination);
         }
     };
-    // used for initial testing
-    // thresholdButton.onclick = () => {
-    //     console.log("clicked threshold button");
-    //     updateParam(this.value, thresholdButton, compressor.threshold);
-    // };
-    // kneeButton.onclick = () => {
-    //     console.log("clicked knee button");
-    //     updateParam(this.value, kneeButton, compressor.knee);
-    // };
-    // ratioButton.onclick = () => {
-    //     console.log("clicked ratio button");
-    //     updateParam(this.value, ratioButton, compressor.ratio);
-    // };
-    // attackButton.onclick = () => {
-    //     console.log("clicked attack button");
-    //     updateParam(this.value, attackButton, compressor.attack);
-    // };
-    // releaseButton.onclick = () => {
-    //     console.log("clicked release button");
-    //     updateParam(this.value, releaseButton, compressor.release);
-    // };
-
+    
+    
     attackSlider.oninput = function() {
         attackVal.innerHTML = this.value;
         updateParam(this.value, attackSlider, compressor.attack);
@@ -126,8 +135,8 @@ if (!context) {
     };
 
         /**
-         * 
-         * @param {object} button - button for specific parameter
+         * @param {float} val - the new value to be assigned to parameter
+         * @param {object} slider - slider for specific parameter
          * @param {object} param - compressor parameter
          * ranges & defaults for each parameter:
          * threshold: [-100,0], -24
@@ -137,25 +146,20 @@ if (!context) {
          * release: [0,1], 0.25
          * 
          */
-        function updateParam(val, button, param) {
+        function updateParam(val, slider, param) {
             // const active = button.getAttribute("data-active");
             // only change param val if compressor is active
             if (compressButton.getAttribute("data-active") === "true") {
-                // if (active === "false") {
-                //     button.setAttribute("data-active", "true");
-                //     button.textContent = "Go to default";
-                //     param.setValueAtTime(0, context.currentTime);
-                //     console.log(param.value);
-                // } else if (active === "true") {
-                // button.setAttribute("data-active", "false");
-                button.textContent = "Apply update";
                 // param.setValueAtTime(button.innerHTML, context.currentTime);
                 param.setValueAtTime(val, context.currentTime);
-                console.log(button.id, ": ", param.value);
+                console.log(slider.id, ": ", param.value);
                 // }
             } else {
                 alert("Need to click 'enable compression' first!");
             }
         };
+        function meterParam(val, meter) {
+            meter.setValueAtTime(val, context.currentTime);
+        }
 }
 });
