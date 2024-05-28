@@ -59,6 +59,7 @@ if (!context) {
     // used for analysing the input volume levels
     // const outputAnalyser = context.createAnalyser();
     
+    // https://jameshfisher.com/2021/01/18/measuring-audio-volume-in-javascript/
     inputLeftMeter = document.getElementById("input-vol-meter-left")
     const pcmData = new Float32Array(inputAnalyser.fftSize);
     const onInputFrame = () => {
