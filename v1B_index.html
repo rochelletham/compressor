@@ -69,7 +69,7 @@
       Input <button onclick="" id="inputAudioButton" data-active="false" id="inputAudio"><img src="images/Sound on.png" alt="Input Audio"></button>
       <h6 style="margin-left: 0%; margin-top: 15px; margin-right: 10px;font-weight: normal;">Input</h6>
       <audio crossorigin="anonymous" controls>
-        <source src="instrumental_finalmix1.2.wav" type="audio/mpeg" />
+        <source src="Master copy.mp3" type="audio/mpeg" />
       </audio>
     </div>
     <!-- Yours toggle Expected -->
@@ -100,30 +100,35 @@
         </div>
         
         <div class="efx-col" style="background-color: rgb(131, 219, 141);">
-          <input type="range" style="writing-mode: vertical-lr" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" />
-          <label for="threshold" style="">Threshold</label>
-          <p>Value: <span id="demo"></span></p>
+          <input type="range" style="writing-mode: vertical-lr" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" oninput="threshold_val.innerText = 'value: ' + this.value">
+          <label for="threshold">Threshold</label>
+          <p id="threshold_val">value: -24</p>
         </div>
         <div class="efx-col" style="background-color: rgb(251, 167, 33);">
-          <input type="range" style="writing-mode: vertical-lr" id="attack"  name="attack" min="0.0" max="1.0" step=".05" value="0.003" class="efx-slider" />
-          <label for="release">Attack</label>
+          <input type="range" style="writing-mode: vertical-lr" id="attack"  name="attack" min="0.0" max="1.0" step=".05" value="0.003" class="efx-slider" oninput="attack_val.innerText = 'value: ' + this.value">
+          <label for="attack">Attack</label>
+          <p id="attack_val">value: 0.003</p>
         </div>
+         
         <div class="efx-col" style="background-color: rgb(70, 172, 255);">
-          <input type="range" style="writing-mode: vertical-lr" id="knee" name="knee" min="0.0" max="40.0" step="1" value="30" class="efx-slider" />
+          <input type="range" style="writing-mode: vertical-lr" id="knee" name="knee" min="0.0" max="40.0" step="1" value="30" class="efx-slider"oninput="knee_val.innerText = 'value: ' + this.value">
           <label for="knee">Knee</label>
-        </div>
+          <p id="knee_val">value: 30</p>
+        </div> 
         
         <div class="efx-col" style="background-color: rgb(255, 162, 162);">
-          <input type="range" style="writing-mode: vertical-lr" id="ratio" name="ratio" min="1.0" max="20.0" step="1" value="12" class="efx-slider" />
+          <input type="range" style="writing-mode: vertical-lr" id="ratio" name="ratio" min="1.0" max="20.0" step="1" value="12" class="efx-slider" oninput="ratio_val.innerText = 'value: ' + this.value">
           <label for="ratio">Ratio</label>
+          <p id="ratio_val">value: 12</p>
         </div>
         <div class="efx-col" style="background-color: rgb(255, 184, 118);">
-          <input type="range" style="writing-mode: vertical-lr"  id="release" name="release" min="0.0" max="1.0" step=".05" value=".25" class="efx-slider" />
+          <input type="range" style="writing-mode: vertical-lr"  id="release" name="release" min="0.0" max="1.0" step=".05" value=".25" class="efx-slider" oninput="release_val.innerText = 'value: ' + this.value">
           <label for="release">Release</label>
-        </div>
+          <p id="release_val">value: .25</p>
+        </div><!-- 
         <div class="vol-col" id="output-vol" style="background-color: lightblue;">
           <div style="display: inline-block; text-align: center;max-width:100px">
-            <meter style="display: inline-block;"id="output-vol-meter" high="0.7" max="1" value="0"></meter>
+            <meter style="display: inline-block;"id="output-vol-meter" high="0.7" max="1" value="0"></meter> -->
             <!-- TODO: left and right channel meters -->
             <!-- <meter style="display: inline-block;"id="input-vol-meter" high="0.5" max="1" value=".5"></meter> -->
           
@@ -132,18 +137,12 @@
         </div>
     
   </div>
-  <div class="container" style="margin:50px; margin-left: 0px;">
-    <button class="btn btn-primary" data-active="false" id="compressButton">Enable compression</button>
-    <!-- <button class="btn btn-secondary" data-active="false" id="thresholdButton">Change threshold</button>
-    <button class="btn btn-success" data-active="false" id="kneeButton">Change knee</button>
-    <button class="btn btn-warning" data-active="false" id="ratioButton">Change ratio</button>
-    <button class="btn btn-info" data-active="false" id="attackButton">Change attack</button>
-    <button class="btn btn-primary" data-active="false" id="releaseButton">Change release</button> -->
-    <button type="button" id="checkButton" class="btn btn-primary">Check!</button>
-  </div> 
-  <div class="container" style="display: flex; justify-content: flex-end;
-    padding-top: 20px; padding-bottom: 20px; min-width: 977px; max-width: 977px;">
-      
+    <div class="container" style="margin:50px; margin-left: 0px;">
+      <button class="btn btn-primary" data-active="false" id="compressButton">Enable compression</button>
+      <button type="button" id="checkButton" class="btn btn-primary">Check!</button>
+    </div> 
+    <div class="container" style="display: flex; justify-content: flex-end;
+      padding-top: 20px; padding-bottom: 20px; min-width: 977px; max-width: 977px;">
     </div>
   </div>
 
