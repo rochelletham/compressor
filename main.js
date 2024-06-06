@@ -68,8 +68,8 @@ if (!context) {
         for (const amplitude of pcmData) { 
             sumSquares += amplitude*amplitude; 
         }
-        inputLeftMeter.value = Math.sqrt(sumSquares / pcmData.length) * 2;
-        console.log(inputLeftMeter.value)
+        inputLeftMeter.value = Math.sqrt(sumSquares / pcmData.length) * 7; // * 2
+        // console.log(inputLeftMeter.value)
         window.requestAnimationFrame(onInputFrame);
     };
     window.requestAnimationFrame(onInputFrame);
@@ -116,22 +116,27 @@ if (!context) {
     
     attackSlider.oninput = function() {
         attackVal.innerHTML = this.value;
+        document.getElementById("attack_val").innerText = 'value: ' + this.value;
         updateParam(this.value, attackSlider, compressor.attack);
     };
     thresholdSlider.oninput = function() {
         thresholdVal.innerHTML = this.value;
+        document.getElementById("threshold_val").innerText = 'value: ' + this.value;
         updateParam(this.value, thresholdSlider, compressor.threshold);
     };
     kneeSlider.oninput = function() {
         kneeVal.innerHTML = this.value;
+        document.getElementById("knee_val").innerText = 'value: ' + this.value;
         updateParam(this.value, kneeSlider, compressor.knee);
     };
     ratioSlider.oninput = function() {
         ratioVal.innerHTML = this.value;
+        document.getElementById("ratio_val").innerText = 'value: ' + this.value;
         updateParam(this.value, ratioSlider, compressor.ratio);
     };
     releaseSlider.oninput = function() {
         releaseVal.innerHTML = this.value;
+        document.getElementById("release_val").innerText = 'value: ' + this.value;
         updateParam(this.value, releaseSlider, compressor.release);
     };
 
