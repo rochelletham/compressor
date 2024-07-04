@@ -69,7 +69,8 @@
       Input <button onclick="" id="inputAudioButton" data-active="false" id="inputAudio"><img src="images/Sound on.png" alt="Input Audio"></button>
       <h6 style="margin-left: 0%; margin-top: 15px; margin-right: 10px;font-weight: normal;">Input</h6>
       <audio crossorigin="anonymous" controls>
-        <source src="Master copy.mp3" type="audio/mpeg" />
+        <!-- <source src="Master copy.mp3" type="audio/mpeg" /> -->
+         <source src="rtpannedaudio.wav" type="audio/mpeg"/>
       </audio>
     </div>
     <!-- Yours toggle Expected -->
@@ -91,9 +92,8 @@
         <div class="vol-col" id="input-vol" style="background-color: lightblue;
         align-items: center;">
           <div style="display: inline-block; text-align: center;max-width:100px">
-            <meter style="display: inline-block;"id="input-vol-meter-left" high="0.7" max="1" value="0"></meter>
-            <!-- TODO: add splitting node to have left and right channels -->
-            <!-- <meter style="display: inline-block;"id="input-vol-meter-rt" high="0.5" max="1" value=".5"></meter> -->
+            <meter style="display: inline-block;"id="input-vol-meter-lt" high="0.7" max="1" value="0"></meter>
+            <meter style="display: inline-block;"id="input-vol-meter-rt" high="0.5" max="1" value="0"></meter>
           
           <label for="input-vol" class="vol-col-label" style="vertical-align: bottom;">Input Volume</label>
         </div>
@@ -125,12 +125,12 @@
           <input type="range" style="writing-mode: vertical-lr"  id="release" name="release" min="0.0" max="1.0" step=".05" value=".25" class="efx-slider" oninput="release_val.innerText = 'value: ' + this.value">
           <label for="release">Release</label>
           <p id="release_val">value: .25</p>
-        </div><!-- 
+        </div> 
         <div class="vol-col" id="output-vol" style="background-color: lightblue;">
           <div style="display: inline-block; text-align: center;max-width:100px">
-            <meter style="display: inline-block;"id="output-vol-meter" high="0.7" max="1" value="0"></meter> -->
+            <meter style="display: inline-block;"id="output-vol-meter" high="0.7" max="1" value="0"></meter> 
             <!-- TODO: left and right channel meters -->
-            <!-- <meter style="display: inline-block;"id="input-vol-meter" high="0.5" max="1" value=".5"></meter> -->
+            <meter style="display: inline-block;"id="input-vol-meter" high="0.5" max="1" value="0"></meter>
           
           <label for="output-vol" class="vol-col-label" style="vertical-align: bottom;">Output Volume</label>
         </div>

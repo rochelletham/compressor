@@ -1,12 +1,13 @@
+const STEREO_CHANS = 2;
 const input = document.querySelector("audio");
 const pre = document.querySelector("pre");
 //  was used for inital testing
 const compressButton = document.querySelector('#compressButton');
 
-var inputLeftMeter = document.getElementById("input-vol-meter-left")
-// var inputRtMeter = document.getElementById("input-vol-meter-rt")
-var outputLeftMeter = document.getElementById("output-vol-meter-left")
-// var outputRtMeter = document.getElementById("output-vol-meter-rt")
+var inputLtMeter = document.getElementById("input-vol-meter-left")
+var inputRtMeter = document.getElementById("input-vol-meter-rt")
+var outputLtMeter = document.getElementById("output-vol-meter-left")
+var outputRtMeter = document.getElementById("output-vol-meter-rt")
 
 var attackSlider = document.getElementById("attack");
 var thresholdSlider = document.getElementById("threshold");
@@ -53,23 +54,43 @@ if (!context) {
     // Feed the HTMLMediaElement into it
     const source = context.createMediaElementSource(input);
     // used for analysing the input volume levels
-    const inputAnalyser = context.createAnalyser();
-    source.connect(inputAnalyser);
-
-    // used for analysing the input volume levels
-    // const outputAnalyser = context.createAnalyser();
+    const inputLtAnalyser = context.createAnalyser();
+    const inputRtAnalyser = context.createAnalyser();
+    inputLtAnalyser.fftSize = 2048;
+    inputRtAnalyser.fftSize = 2048;
     
-    // https://jameshfisher.com/2021/01/18/measuring-audio-volume-in-javascript/
-    inputLeftMeter = document.getElementById("input-vol-meter-left")
-    const pcmData = new Float32Array(inputAnalyser.fftSize);
+    // channel splitting node
+    const inputSplitter = context.createChannelSplitter(STEREO_CHANS);
+    source.connect(inputSplitter);
+    // connecting the left channel of splitter to left channel of input analyser
+    inputSplitter.connect(inputLtAnalyser, 0);
+    inputSplitter.connect(inputRtAnalyser, 1);
+    
+    inputLtMeter = document.getElementById("input-vol-meter-lt");
+    inputRtMeter = document.getElementById("input-vol-meter-rt");
+    // inputLtMeter.value = 0.0;
+    
+    
+    // extracting audio data
+    const ltBufferLen = inputLtAnalyser.frequencyBinCount;
+    const rtBufferLen = inputRtAnalyser.frequencyBinCount;
+    const ltData = new Float32Array(ltBufferLen);
+    const rtData = new Float32Array(rtBufferLen);
     const onInputFrame = () => {
-        inputAnalyser.getFloatTimeDomainData(pcmData);
-        let sumSquares = 0.0;
-        for (const amplitude of pcmData) { 
-            sumSquares += amplitude*amplitude; 
+        inputLtAnalyser.getFloatTimeDomainData(ltData);
+        inputRtAnalyser.getFloatTimeDomainData(rtData);
+        let ltSumSquares = 0.0;
+        let rtSumSquares = 0.0;
+        for (const amplitude of ltData) { 
+            ltSumSquares += amplitude*amplitude; 
         }
-        inputLeftMeter.value = Math.sqrt(sumSquares / pcmData.length) * 7; // * 2
-        // console.log(inputLeftMeter.value)
+        for (const amplitude of rtData) { 
+            rtSumSquares += amplitude*amplitude; 
+        }
+
+        inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 7; // * 2
+        inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 7; // * 2
+        
         window.requestAnimationFrame(onInputFrame);
     };
     window.requestAnimationFrame(onInputFrame);
@@ -87,9 +108,10 @@ if (!context) {
     
 
     // connect the AudioBufferSourceNode to the destination
-    inputAnalyser.connect(context.destination);   
-    inputAnalyser.smoothingTimeConstant = 0.3;
-    
+    inputLtAnalyser.connect(context.destination);   
+    inputLtAnalyser.smoothingTimeConstant = 0.3;
+    inputRtAnalyser.connect(context.destination);   
+    inputRtAnalyser.smoothingTimeConstant = 0.3;
     
 
     compressButton.onclick = () => {
@@ -99,17 +121,21 @@ if (!context) {
             compressButton.textContent = "Remove compression";
             console.log("Added compressor node");
             // compressor node inside node chain
-            inputAnalyser.disconnect(context.destination);
-            inputAnalyser.connect(compressor);
+            inputLtAnalyser.disconnect(context.destination);
+            inputLtAnalyser.connect(compressor);
+            inputRtAnalyser.disconnect(context.destination);
+            inputRtAnalyser.connect(compressor);
             compressor.connect(context.destination);
             
         } else if (active === "true") {
             compressButton.setAttribute("data-active", "false");
             compressButton.textContent = "Enable compression";
             // compressor node taken out of node chain
-            inputAnalyser.disconnect(compressor);
+            inputLtAnalyser.disconnect(compressor);
+            inputRtAnalyser.disconnect(compressor);
             compressor.disconnect(context.destination);
-            inputAnalyser.connect(context.destination);
+            inputLtAnalyser.connect(context.destination);
+            inputRtAnalyser.connect(context.destination);
         }
     };
     
