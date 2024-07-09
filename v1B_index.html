@@ -88,7 +88,7 @@
       <button type="button" id="hintButton" class="btn btn-primary">hint</button>
     </div>
     <div class="container" id="effect-bk">
-      <!-- INPUT VOLUME SECTION class=col-sm-13 col-md-13 VolCol-->
+      <!-- INPUT VOLUME SECTION -->
         <div class="vol-col" id="input-vol" style="background-color: lightblue;
         align-items: center;">
           <div style="display: inline-block; text-align: center;max-width:100px">
@@ -98,40 +98,41 @@
           <label for="input-vol" class="vol-col-label" style="vertical-align: bottom;">Input Volume</label>
         </div>
         </div>
-        
+        <!-- THRESHOLD SECTION -->
         <div class="efx-col" style="background-color: rgb(131, 219, 141);">
           <input type="range" style="writing-mode: vertical-lr" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" oninput="threshold_val.innerText = 'value: ' + this.value">
           <label for="threshold">Threshold</label>
           <p id="threshold_val">value: -24</p>
         </div>
+        <!-- ATTACK SECTION -->
         <div class="efx-col" style="background-color: rgb(251, 167, 33);">
           <input type="range" style="writing-mode: vertical-lr" id="attack"  name="attack" min="0.0" max="1.0" step=".05" value="0.003" class="efx-slider" oninput="attack_val.innerText = 'value: ' + this.value">
           <label for="attack">Attack</label>
           <p id="attack_val">value: 0.003</p>
         </div>
-         
+        <!-- KNEE SECTION -->
         <div class="efx-col" style="background-color: rgb(70, 172, 255);">
           <input type="range" style="writing-mode: vertical-lr" id="knee" name="knee" min="0.0" max="40.0" step="1" value="30" class="efx-slider"oninput="knee_val.innerText = 'value: ' + this.value">
           <label for="knee">Knee</label>
           <p id="knee_val">value: 30</p>
         </div> 
-        
+        <!-- RATIO SECTION --> 
         <div class="efx-col" style="background-color: rgb(255, 162, 162);">
           <input type="range" style="writing-mode: vertical-lr" id="ratio" name="ratio" min="1.0" max="20.0" step="1" value="12" class="efx-slider" oninput="ratio_val.innerText = 'value: ' + this.value">
           <label for="ratio">Ratio</label>
           <p id="ratio_val">value: 12</p>
         </div>
+        <!-- RELEASE SECTION -->
         <div class="efx-col" style="background-color: rgb(255, 184, 118);">
           <input type="range" style="writing-mode: vertical-lr"  id="release" name="release" min="0.0" max="1.0" step=".05" value=".25" class="efx-slider" oninput="release_val.innerText = 'value: ' + this.value">
           <label for="release">Release</label>
           <p id="release_val">value: .25</p>
         </div> 
+        <!-- OUTPUT VOL SECTION -->
         <div class="vol-col" id="output-vol" style="background-color: lightblue;">
           <div style="display: inline-block; text-align: center;max-width:100px">
-            <meter style="display: inline-block;"id="output-vol-meter" high="0.7" max="1" value="0"></meter> 
-            <!-- TODO: left and right channel meters -->
-            <meter style="display: inline-block;"id="input-vol-meter" high="0.5" max="1" value="0"></meter>
-          
+            <meter style="display: inline-block;"id="output-vol-meter-lt" high="0.7" max="1" value="0"></meter> 
+            <meter style="display: inline-block;"id="output-vol-meter-rt" high="0.5" max="1" value="0"></meter>
           <label for="output-vol" class="vol-col-label" style="vertical-align: bottom;">Output Volume</label>
         </div>
         </div>

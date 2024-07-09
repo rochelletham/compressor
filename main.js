@@ -58,17 +58,35 @@ if (!context) {
     const inputRtAnalyser = context.createAnalyser();
     inputLtAnalyser.fftSize = 2048;
     inputRtAnalyser.fftSize = 2048;
+
+    // used for analysing the output volume levels (after compressor)
+    const outputLtAnalyser = context.createAnalyser();
+    const outputRtAnalyser = context.createAnalyser();
+    outputLtAnalyser.fftSize = 2048;
+    outputRtAnalyser.fftSize = 2048;
     
-    // channel splitting node
+    // channel splitting node for input
     const inputSplitter = context.createChannelSplitter(STEREO_CHANS);
     source.connect(inputSplitter);
     // connecting the left channel of splitter to left channel of input analyser
     inputSplitter.connect(inputLtAnalyser, 0);
     inputSplitter.connect(inputRtAnalyser, 1);
     
+    // channel splitting node for output
+    const outputSplitter = context.createChannelSplitter(STEREO_CHANS);
+    
+    // connecting the left channel of splitter to left channel of output analyser
+    outputSplitter.connect(outputLtAnalyser, 0);
+    outputSplitter.connect(outputRtAnalyser, 1);
+
+    // connect to destination by default without compressor
+    inputLtAnalyser.connect(context.destination);
+    inputRtAnalyser.connect(context.destination);
+
     inputLtMeter = document.getElementById("input-vol-meter-lt");
     inputRtMeter = document.getElementById("input-vol-meter-rt");
-    // inputLtMeter.value = 0.0;
+    outputLtMeter = document.getElementById("output-vol-meter-lt");
+    outputRtMeter = document.getElementById("output-vol-meter-rt");
     
     
     // extracting audio data
@@ -76,6 +94,12 @@ if (!context) {
     const rtBufferLen = inputRtAnalyser.frequencyBinCount;
     const ltData = new Float32Array(ltBufferLen);
     const rtData = new Float32Array(rtBufferLen);
+
+    const ltOutBufferLen = outputLtAnalyser.frequencyBinCount;
+    const rtOutBufferLen = outputRtAnalyser.frequencyBinCount;
+    const ltOutData = new Float32Array(ltOutBufferLen);
+    const rtOutData = new Float32Array(rtOutBufferLen);
+    
     const onInputFrame = () => {
         inputLtAnalyser.getFloatTimeDomainData(ltData);
         inputRtAnalyser.getFloatTimeDomainData(rtData);
@@ -90,11 +114,30 @@ if (!context) {
 
         inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 7; // * 2
         inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 7; // * 2
-        
+            
+        // after compressor applied audio metering
+        const active = compressButton.getAttribute("data-active");
+        if (active === "true") {
+            console.log("active");
+            outputLtAnalyser.getFloatTimeDomainData(ltOutData);
+            outputRtAnalyser.getFloatTimeDomainData(rtOutData);
+            let ltOutSumSquares = 0.0;
+            let rtOutSumSquares = 0.0;
+            
+            for (const amplitude of ltOutData) { 
+                ltOutSumSquares += amplitude*amplitude; 
+            }
+            for (const amplitude of rtOutData) { 
+                rtOutSumSquares += amplitude*amplitude; 
+            }
+            outputLtMeter.value = Math.sqrt(ltOutSumSquares / ltOutData.length) * 7; // * 2
+            outputRtMeter.value = Math.sqrt(rtOutSumSquares / rtOutData.length) * 7; // * 2
+        }
         window.requestAnimationFrame(onInputFrame);
     };
     window.requestAnimationFrame(onInputFrame);
 
+    
 
     // Create a compressor node
     const compressor = new DynamicsCompressorNode(context, {
@@ -107,11 +150,15 @@ if (!context) {
 
     
 
-    // connect the AudioBufferSourceNode to the destination
-    inputLtAnalyser.connect(context.destination);   
-    inputLtAnalyser.smoothingTimeConstant = 0.3;
-    inputRtAnalyser.connect(context.destination);   
-    inputRtAnalyser.smoothingTimeConstant = 0.3;
+    // connect output analyser to the destination
+    outputLtAnalyser.connect(context.destination);   
+    outputLtAnalyser.smoothingTimeConstant = 0.3;
+    outputRtAnalyser.connect(context.destination);   
+    outputRtAnalyser.smoothingTimeConstant = 0.3;
+    
+    // connecting the left channel of splitter to left channel of output analyser
+    outputSplitter.connect(outputLtAnalyser, 0);
+    outputSplitter.connect(outputRtAnalyser, 1);
     
 
     compressButton.onclick = () => {
@@ -125,7 +172,11 @@ if (!context) {
             inputLtAnalyser.connect(compressor);
             inputRtAnalyser.disconnect(context.destination);
             inputRtAnalyser.connect(compressor);
-            compressor.connect(context.destination);
+            compressor.connect(outputSplitter);
+            outputSplitter.connect(outputLtAnalyser,0);
+            outputSplitter.connect(outputRtAnalyser,1);
+            outputLtAnalyser.connect(context.destination);
+            outputRtAnalyser.connect(context.destination);
             
         } else if (active === "true") {
             compressButton.setAttribute("data-active", "false");
@@ -133,7 +184,8 @@ if (!context) {
             // compressor node taken out of node chain
             inputLtAnalyser.disconnect(compressor);
             inputRtAnalyser.disconnect(compressor);
-            compressor.disconnect(context.destination);
+            outputLtAnalyser.disconnect(context.destination);
+            outputRtAnalyser.disconnect(context.destination);
             inputLtAnalyser.connect(context.destination);
             inputRtAnalyser.connect(context.destination);
         }
