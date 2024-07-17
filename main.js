@@ -106,29 +106,28 @@ if (!context) {
         let ltSumSquares = 0.0;
         let rtSumSquares = 0.0;
         for (const amplitude of ltData) { 
-            ltSumSquares += amplitude*amplitude; 
+            ltSumSquares += Math.pow(amplitude,2); 
         }
         for (const amplitude of rtData) { 
-            rtSumSquares += amplitude*amplitude; 
+            rtSumSquares += Math.pow(amplitude,2); 
         }
 
         inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 7; // * 2
         inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 7; // * 2
             
-        // after compressor applied audio metering
+        // after compressor applied
         const active = compressButton.getAttribute("data-active");
         if (active === "true") {
-            console.log("active");
             outputLtAnalyser.getFloatTimeDomainData(ltOutData);
             outputRtAnalyser.getFloatTimeDomainData(rtOutData);
             let ltOutSumSquares = 0.0;
             let rtOutSumSquares = 0.0;
             
             for (const amplitude of ltOutData) { 
-                ltOutSumSquares += amplitude*amplitude; 
+                ltOutSumSquares += Math.pow(amplitude,2); 
             }
             for (const amplitude of rtOutData) { 
-                rtOutSumSquares += amplitude*amplitude; 
+                rtOutSumSquares += Math.pow(amplitude,2); 
             }
             outputLtMeter.value = Math.sqrt(ltOutSumSquares / ltOutData.length) * 7; // * 2
             outputRtMeter.value = Math.sqrt(rtOutSumSquares / rtOutData.length) * 7; // * 2

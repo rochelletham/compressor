@@ -89,13 +89,11 @@
     </div>
     <div class="container" id="effect-bk">
       <!-- INPUT VOLUME SECTION -->
-        <div class="vol-col" id="input-vol" style="background-color: lightblue;
-        align-items: center;">
-          <div style="display: inline-block; text-align: center;max-width:100px">
-            <meter style="display: inline-block;"id="input-vol-meter-lt" high="0.7" max="1" value="0"></meter>
-            <meter style="display: inline-block;"id="input-vol-meter-rt" high="0.5" max="1" value="0"></meter>
-          
-          <label for="input-vol" class="vol-col-label" style="vertical-align: bottom;">Input Volume</label>
+        <div class="vol-col" id="input-vol">
+          <div class="meters">
+            <meter style="border-width:15px; margin-right: -20%;"id="input-vol-meter-lt" high="0.7" max="1" value="0"></meter>
+            <meter id="input-vol-meter-rt" high="0.5" max="1" value="0"></meter>
+          <label for="input-vol" class="vol-col-label">Input Volume</label>
         </div>
         </div>
         <!-- THRESHOLD SECTION -->
@@ -129,11 +127,11 @@
           <p id="release_val">value: .25</p>
         </div> 
         <!-- OUTPUT VOL SECTION -->
-        <div class="vol-col" id="output-vol" style="background-color: lightblue;">
-          <div style="display: inline-block; text-align: center;max-width:100px">
-            <meter style="display: inline-block;"id="output-vol-meter-lt" high="0.7" max="1" value="0"></meter> 
-            <meter style="display: inline-block;"id="output-vol-meter-rt" high="0.5" max="1" value="0"></meter>
-          <label for="output-vol" class="vol-col-label" style="vertical-align: bottom;">Output Volume</label>
+        <div class="vol-col" id="output-vol">
+          <div class="meters">
+            <meter style="border-width:15px; margin-right: -20%;"id="output-vol-meter-lt" high="0.7" max="1" value="0"></meter> 
+            <meter id="output-vol-meter-rt" high="0.5" max="1" value="0"></meter>
+          <label for="output-vol" class="vol-col-label">Output Volume</label>
         </div>
         </div>
     

@@ -1,30 +1,13 @@
-/* vol boxes */
-.vol-col {
-  /* flex: 1; */
-  display: flex;
-  padding: 10px;
-  border: 10px solid #ccc;
-  box-sizing: border-box;
-}
-.vol-col-label {
-  align-self: flex-end;
-  text-align: center;
-  background-color: rgb(219, 219, 219);
-  border-radius: 6px;
-  padding-left: 5%;
-  padding-right: 5%;
-  /* background-color: lightpink; */
-}
+
 /* slider container box */
 .efx-col {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* width: max-content; */
   border: 10px solid #ccc;
-  /* box-sizing: border-box; */
   text-align: center;
+  max-height: fit-content;
 }
 .efx-col label{
   margin-top: 18%;
@@ -33,16 +16,22 @@
   padding-left: 5%;
   padding-right: 5%;
 }
+
 /* slider bar */
 .efx-slider { 
+  -webkit-appearance: none; 
+  -moz-appearance: none; 
+  appearance: none; 
   cursor: pointer;
   margin-top: 45%;
   position: relative;
   align-items: center;
   min-height: 250px;
+  max-height: fit-content;
   /* height: 50%; */
-  border-radius: 5px;  
+  border-radius: 3px;  
   background: #d3d3d3;
+  max-width: 50%;
   outline: none;
   opacity: 0.85;
   -webkit-transition: .2s;
@@ -54,6 +43,7 @@
     appearance: none;
     width: 25px;
     height: 25px;
+    max-height: fit-content;
     border-radius: 50%; 
     background: rgb(3, 98, 200);
     cursor: pointer;
