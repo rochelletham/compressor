@@ -182,7 +182,7 @@ input:checked + .slider:before {
   /* left: 194px;
   top: 569px; */
   display: flex;
-  background: #E5E1E9;
+  background: rgb(229, 225, 233);
   border-radius: 6px;
 
 }

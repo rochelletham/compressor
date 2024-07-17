@@ -72,7 +72,7 @@ if (!context) {
     inputSplitter.connect(inputLtAnalyser, 0);
     inputSplitter.connect(inputRtAnalyser, 1);
     
-    // channel splitting node for output
+    // after compressor, channel splitting node for output
     const outputSplitter = context.createChannelSplitter(STEREO_CHANS);
     
     // connecting the left channel of splitter to left channel of output analyser
@@ -112,8 +112,8 @@ if (!context) {
             rtSumSquares += Math.pow(amplitude,2); 
         }
 
-        inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 7; // * 2
-        inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 7; // * 2
+        inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 3; // * 2
+        inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 3; // * 2
             
         // after compressor applied
         const active = compressButton.getAttribute("data-active");
@@ -147,7 +147,7 @@ if (!context) {
         release: releaseVal,
     });
 
-    
+    compressor.connect(outputSplitter);
 
     // connect output analyser to the destination
     outputLtAnalyser.connect(context.destination);   
@@ -171,7 +171,6 @@ if (!context) {
             inputLtAnalyser.connect(compressor);
             inputRtAnalyser.disconnect(context.destination);
             inputRtAnalyser.connect(compressor);
-            compressor.connect(outputSplitter);
             outputSplitter.connect(outputLtAnalyser,0);
             outputSplitter.connect(outputRtAnalyser,1);
             outputLtAnalyser.connect(context.destination);
@@ -237,8 +236,6 @@ if (!context) {
                 param.setValueAtTime(val, context.currentTime);
                 console.log(slider.id, ": ", param.value);
                 // }
-            } else {
-                alert("Need to click 'enable compression' first!");
             }
         };
         function meterParam(val, meter) {
