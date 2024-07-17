@@ -50,17 +50,17 @@
     background-color: rgb(255, 255, 255);
     border: 2px solid rgb(184, 183, 183);
     /* border: 2px solid rgb(192, 192, 192); */
-    border-radius: 4px;
+    border-radius: 3px;
     
   }
   
   .efx-slider::-webkit-slider-thumb:hover {
     /* animation for highlight */
     transition: .05s ease-in-out; 
-    border-color: rgb(223, 223, 223);
-    width: 45px;
+    border-color: rgb(224, 224, 224);
+    width: 46px;
     /* box-shadow: h-offset v-offset blur-radius spread-radius color inset; */
-    box-shadow: 0 0 0 1px rgb(223, 223, 223);
+    box-shadow: 0 0 0 2px rgb(236, 236, 236);
   }
   
 
