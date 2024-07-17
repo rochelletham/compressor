@@ -7,9 +7,10 @@
   align-items: flex-end;
   max-width: fit-content;
   min-width: fit-content;
-  min-height: max-content;
+  min-height: 270px;
   padding: 10px;
-  border: 10px solid #ccc;
+  border-radius: 15px;
+  border: 10px solid rgb(229, 225, 233); 
   box-sizing: border-box;
   text-align: center;
   max-width:100px;
@@ -25,8 +26,9 @@
 .vol-col-label {
   align-self: flex-end;
   text-align: center;
-  background-color: rgb(219, 219, 219);
+  background-color: rgb(219, 219, 219); 
   border-radius: 6px;
+  margin-top: 7%;
   padding-left: 5%;
   padding-right: 5%;
   max-height: 30%;
@@ -67,8 +69,14 @@ meter::-webkit-meter-bar {
 
 
 #inputAudioButton { 
-    outline: none; 
+    /* outline: none;  */
     border:none;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    color: red;
+    border-color: #9fa5ab00;
     background-color: transparent;
 }
 
@@ -76,6 +84,7 @@ meter::-webkit-meter-bar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-left:3px;
   }
   
   .item {
@@ -177,12 +186,15 @@ input:checked + .slider:before {
 #effect-bk {
   width: 977px;
   min-width: 977px;
-  min-width: 200px;
+  /* min-width: 200px; */
   min-height: 400px;
-  /* left: 194px;
-  top: 569px; */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 3px;
   display: flex;
   background: rgb(229, 225, 233);
+  /* border: 3px solid rgb(91, 91, 91); */
+  /* background: rgb(204, 204, 204); */
   border-radius: 6px;
 
 }
@@ -207,4 +219,15 @@ input:checked + .slider:before {
   display: block;
   padding: 0;
   text-align: center;
+}
+
+.row {
+  /* display: flex;  */
+  /* justify-content: flex-end; */
+  padding-top: 25px;
+  padding-bottom: 25px;  
+  padding-left: 0;
+  padding-right: 0;
+  /* background-color: red; */
+  width: 977px;
 }

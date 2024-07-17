@@ -5,18 +5,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 10px solid rgb(204, 204, 204);
-  /* rgb(229, 225, 233); */
+  border: 10px solid rgb(229, 225, 233);
+  border-radius: 15px;
+  /* rgb(204, 204, 204); */
+  /* rgb(229, 225, 233); lighter */  
   text-align: center;
   max-height: fit-content;
 }
 .efx-col label{
   margin-top: 18%;
+  margin-bottom: 18%;
   background-color: rgb(219, 219, 219);
   border-radius: 6px;
-  padding-left: 5%;
-  padding-right: 5%;
+  /* padding-left: 8%;
+  padding-right: 8%; */
+  min-width: 75%;
 }
+
 
 /* slider bar */
 .efx-slider { 
@@ -25,10 +30,10 @@
   writing-mode: vertical-lr;
   width: 18px;
   cursor: pointer;
-  margin-top: 45%;
+  /* margin-top: 45%; un-comment if want to have the param label at bottom instead */
   position: relative;
   align-items: center;
-  min-height: 250px;
+  min-height: 270px;
   max-height: fit-content;
   /* height: 50%; */
   border-radius: 3px;  
@@ -56,11 +61,11 @@
   
   .efx-slider::-webkit-slider-thumb:hover {
     /* animation for highlight */
-    transition: .05s ease-in-out; 
-    border-color: rgb(224, 224, 224);
+    /* transition: .05s ease-in-out;  */
+    border-color: rgb(220, 220, 220);
     width: 46px;
     /* box-shadow: h-offset v-offset blur-radius spread-radius color inset; */
-    box-shadow: 0 0 0 2px rgb(236, 236, 236);
+    box-shadow: 0 0 0 2px rgb(237, 236, 236);
   }
   
 

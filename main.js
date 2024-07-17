@@ -129,8 +129,8 @@ if (!context) {
             for (const amplitude of rtOutData) { 
                 rtOutSumSquares += Math.pow(amplitude,2); 
             }
-            outputLtMeter.value = Math.sqrt(ltOutSumSquares / ltOutData.length) * 7; // * 2
-            outputRtMeter.value = Math.sqrt(rtOutSumSquares / rtOutData.length) * 7; // * 2
+            outputLtMeter.value = Math.sqrt(ltOutSumSquares / ltOutData.length) * 3; // * 2
+            outputRtMeter.value = Math.sqrt(rtOutSumSquares / rtOutData.length) * 3; // * 2
         }
         window.requestAnimationFrame(onInputFrame);
     };
@@ -192,27 +192,27 @@ if (!context) {
     
     attackSlider.oninput = function() {
         attackVal.innerHTML = this.value;
-        document.getElementById("attack_val").innerText = 'value: ' + this.value;
+        document.getElementById("attack_val").innerHTML = "<b>Attack</b> <br> "+this.value;
         updateParam(this.value, attackSlider, compressor.attack);
     };
     thresholdSlider.oninput = function() {
         thresholdVal.innerHTML = this.value;
-        document.getElementById("threshold_val").innerText = 'value: ' + this.value;
+        document.getElementById("threshold_val").innerHTML = "<b>Threshold</b> <br> "+this.value;
         updateParam(this.value, thresholdSlider, compressor.threshold);
     };
     kneeSlider.oninput = function() {
         kneeVal.innerHTML = this.value;
-        document.getElementById("knee_val").innerText = 'value: ' + this.value;
+        document.getElementById("knee_val").innerHTML = "<b>Knee</b> <br> "+this.value;
         updateParam(this.value, kneeSlider, compressor.knee);
     };
     ratioSlider.oninput = function() {
         ratioVal.innerHTML = this.value;
-        document.getElementById("ratio_val").innerText = 'value: ' + this.value;
+        document.getElementById("ratio_val").innerHTML = "<b>Ratio</b> <br> "+this.value;
         updateParam(this.value, ratioSlider, compressor.ratio);
     };
     releaseSlider.oninput = function() {
         releaseVal.innerHTML = this.value;
-        document.getElementById("release_val").innerText = 'value: ' + this.value;
+        document.getElementById("release_val").innerHTML = "<b>Release</b> <br> "+this.value;
         updateParam(this.value, releaseSlider, compressor.release);
     };
 
