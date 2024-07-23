@@ -2,9 +2,9 @@
 .vol-col {
   text-align: center;
   background-color: lightblue;
-  display: flex;
-  justify-content: space-between; /* Distribute items evenly with space between */
-  align-items: flex-end;
+  /* display: flex; */
+  /* justify-content: space-between; Distribute items evenly with space between */
+  /* align-items: flex-end; */
   max-width: fit-content;
   min-width: fit-content;
   min-height: 270px;
@@ -13,26 +13,43 @@
   border: 10px solid rgb(229, 225, 233); 
   box-sizing: border-box;
   text-align: center;
-  max-width:100px;
+  max-width:100px; 
 }
+.vol-col label {
+  border-radius: 6px;
+  min-height: 50px;
+  margin-top: 12%;
+  background-color: rgb(219, 219, 219);
+  border-radius: 6px;
+  padding-left: 8%;
+  padding-right: 8%;
+}
+
 .meters {
   text-align: center;
-  max-width:100px; 
   vertical-align: bottom;
+  max-width:100px;
+  min-width:fit-content;
+  border: 5px solid #9fa5ab00;
+  /* temporary fix for upside down meter.. */
+  -moz-transform: scale(-1, -1);
+  -webkit-transform: scale(-1, -1);
+  -o-transform: scale(-1, -1);
+  -ms-transform: scale(-1, -1);
+  transform: scale(-1, -1);
+}
+
+.meter-bar-lt {
+  border: 5px solid #9fa5ab00; 
+  margin-right: -20%;
+}
+
+.meter-bar-rt {
   border: 5px solid #9fa5ab00;
 }
 
 
-.vol-col-label {
-  align-self: flex-end;
-  text-align: center;
-  background-color: rgb(219, 219, 219); 
-  border-radius: 6px;
-  margin-top: 7%;
-  padding-left: 5%;
-  padding-right: 5%;
-  max-height: 30%;
-}
+
 
 meter {
   writing-mode: vertical-lr;

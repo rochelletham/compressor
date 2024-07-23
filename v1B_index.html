@@ -67,9 +67,8 @@
         <br>Knee (dB): the slope of the compression applied.
         <br>Ratio (unitless): amount of compression that is applied to the audio input.
         <br>Release (sec): amount of time taken for the compressor to stop compressing the audio.</p>
-        <br>
-
-        <br>
+  
+        <br><br>
         Audio file: Instrumental by Rochelle T.
       </div>
     </div>
@@ -99,10 +98,10 @@
     <div class="container" id="effect-bk">
       <!-- INPUT VOLUME SECTION -->
         <div class="vol-col" id="input-vol">
+          <label for="input-vol" class="vol-col-label"><b>Input Volume</b></label>
           <div class="meters">
-            <label for="input-vol" class="vol-col-label"><b>Input Volume</b></label>
-            <meter style="border-width:15px; margin-right: -20%;"id="input-vol-meter-lt" high="0.7" max="1" value="0"></meter>
-            <meter id="input-vol-meter-rt" high="0.5" max="1" value="0"></meter>
+            <meter class="meter-bar-lt" id="input-vol-meter-lt" high="0.7" max="1" value="0"></meter>
+            <meter class="meter-bar-rt" id="input-vol-meter-rt" high="0.5" max="1" value="0"></meter>
           
         </div>
         </div>
@@ -143,12 +142,11 @@
         </div> 
         <!-- OUTPUT VOL SECTION -->
         <div class="vol-col" id="output-vol">
+          <label for="output-vol" class="vol-col-label"><b>Output Volume</b></label>
           <div class="meters">
-            <label for="output-vol" class="vol-col-label"><b>Output Volume</b></label>
-            <meter style="border-width:15px; margin-right: -20%;"id="output-vol-meter-lt" high="0.7" max="1" value="0"></meter> 
-            <meter id="output-vol-meter-rt" high="0.5" max="1" value="0"></meter>
-          
-        </div>
+            <meter class="meter-bar-lt" id="output-vol-meter-lt" high="0.7" max="1" value="0"></meter> 
+            <meter class="meter-bar-rt" id="output-vol-meter-rt" high="0.5" max="1" value="0"></meter>
+          </div>
         </div>
     
   </div>
