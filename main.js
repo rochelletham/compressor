@@ -1,25 +1,34 @@
 const STEREO_CHANS = 2;
+// default initial values for parameters
+const THRESHVAL = -24;
+const KNEEVAL = 30;
+const RATIOVAL = 12;
+const ATTACKVAL = 0.003;
+const RELVAL = 0.25;
+
 const input = document.querySelector("audio");
 const pre = document.querySelector("pre");
 //  was used for inital testing
 const compressButton = document.querySelector('#compressButton');
 
-var inputLtMeter = document.getElementById("input-vol-meter-left")
-var inputRtMeter = document.getElementById("input-vol-meter-rt")
-var outputLtMeter = document.getElementById("output-vol-meter-left")
-var outputRtMeter = document.getElementById("output-vol-meter-rt")
+const inputLtMeter = document.getElementById("input-vol-meter-left")
+const inputRtMeter = document.getElementById("input-vol-meter-rt")
+const outputLtMeter = document.getElementById("output-vol-meter-left")
+const outputRtMeter = document.getElementById("output-vol-meter-rt")
 
-var attackSlider = document.getElementById("attack");
-var thresholdSlider = document.getElementById("threshold");
-var kneeSlider = document.getElementById("knee");
-var ratioSlider = document.getElementById("ratio");
-var releaseSlider = document.getElementById("release");
+const attackSlider = document.getElementById("attack");
+const thresholdSlider = document.getElementById("threshold");
+const kneeSlider = document.getElementById("knee");
+const ratioSlider = document.getElementById("ratio");
+const releaseSlider = document.getElementById("release");
+const SLIDER_IDS = [attackSlider, thresholdSlider, kneeSlider, ratioSlider, releaseSlider];
 
-var thresholdVal = -24; 
-var kneeVal = 30;
-var ratioVal = 12;
-var attackVal = 0.003;
-var releaseVal = 0.25;
+var thresholdVal = THRESHVAL; 
+var kneeVal = KNEEVAL;
+var ratioVal = RATIOVAL;
+var attackVal = ATTACKVAL;
+var releaseVal = RELVAL;
+
 // setting the intial values
 attackSlider.innerHTML = attackVal;
 kneeSlider.innerHTML = kneeVal;
@@ -27,6 +36,11 @@ thresholdSlider.innerHTML = thresholdVal;
 ratioSlider.innerHTML = ratioVal;
 releaseSlider.innerHTML = releaseVal;
 
+// SLIDER_IDS.forEach(slider_id => {   
+//     if (slider_id) {
+//         slider_id.disabled = true;
+//     }
+// });
 
 let context;
 
@@ -34,8 +48,7 @@ hintButton.onclick = function(){
     alert("Clicked hint!");
 };
 checkButton.onclick = function(){
-    
-    
+    alert("clicked check!");
 };
 
 // only will run audio context code when input audio is in play state
@@ -82,11 +95,6 @@ if (!context) {
     // connect to destination by default without compressor
     inputLtAnalyser.connect(context.destination);
     inputRtAnalyser.connect(context.destination);
-
-    inputLtMeter = document.getElementById("input-vol-meter-lt");
-    inputRtMeter = document.getElementById("input-vol-meter-rt");
-    outputLtMeter = document.getElementById("output-vol-meter-lt");
-    outputRtMeter = document.getElementById("output-vol-meter-rt");
     
     
     // extracting audio data
@@ -111,10 +119,10 @@ if (!context) {
         for (const amplitude of rtData) { 
             rtSumSquares += Math.pow(amplitude,2); 
         }
-
-        inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 3; // * 2
-        inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 3; // * 2
-            
+        if (inputLtMeter && inputRtMeter) { 
+            inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 3; // * 2
+            inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 3; // * 2
+        }
         // after compressor applied
         const active = compressButton.getAttribute("data-active");
         if (active === "true") {
@@ -129,8 +137,10 @@ if (!context) {
             for (const amplitude of rtOutData) { 
                 rtOutSumSquares += Math.pow(amplitude,2); 
             }
-            outputLtMeter.value = Math.sqrt(ltOutSumSquares / ltOutData.length) * 3; // * 2
-            outputRtMeter.value = Math.sqrt(rtOutSumSquares / rtOutData.length) * 3; // * 2
+            if (outputLtMeter && outputRtMeter) {
+                outputLtMeter.value = Math.sqrt(ltOutSumSquares / ltOutData.length) * 3; // * 2
+                outputRtMeter.value = Math.sqrt(rtOutSumSquares / rtOutData.length) * 3; // * 2
+            }
         }
         window.requestAnimationFrame(onInputFrame);
     };
@@ -159,11 +169,21 @@ if (!context) {
     outputSplitter.connect(outputLtAnalyser, 0);
     outputSplitter.connect(outputRtAnalyser, 1);
     
-
+    const effect_bk = document.getElementById("effect-bk");
+    let compressActive = compressButton.getAttribute("data-active");
     compressButton.onclick = () => {
-        const active = compressButton.getAttribute("data-active");
-        if (active === "false") {
-            compressButton.setAttribute("data-active", "true");
+        compressActive = compressButton.getAttribute("data-active");
+        if (compressActive === "false") {
+            // UI handling
+            effect_bk.style.filter = `brightness(1)`;
+
+            compressActive = "true";
+            compressButton.setAttribute("data-active", compressActive);
+            SLIDER_IDS.forEach(slider_id => {   
+                if (slider_id) {
+                    slider_id.disabled = false;
+                }
+            });
             compressButton.textContent = "Remove compression";
             console.log("Added compressor node");
             // compressor node inside node chain
@@ -176,8 +196,20 @@ if (!context) {
             outputLtAnalyser.connect(context.destination);
             outputRtAnalyser.connect(context.destination);
             
-        } else if (active === "true") {
-            compressButton.setAttribute("data-active", "false");
+        } else if (compressActive === "true") {
+            // UI handling
+            effect_bk.style.filter = `brightness(0.5)`;
+            if (outputLtMeter && outputRtMeter) {
+                outputLtMeter.value = 0;
+                outputRtMeter.value = 0;
+            }
+            compressActive = "false";
+            compressButton.setAttribute("data-active", compressActive);
+            SLIDER_IDS.forEach(slider_id => {   
+                if (slider_id) {
+                    slider_id.disabled = true;
+                }
+            });
             compressButton.textContent = "Enable compression";
             // compressor node taken out of node chain
             inputLtAnalyser.disconnect(compressor);
@@ -189,31 +221,47 @@ if (!context) {
         }
     };
     
+    // sliderChangeVal(paramName, val) {
+
+    // }
+    
+
+    thresholdSlider.oninput = function() {
+        if (compressActive === "true") {
+            thresholdVal.innerHTML = this.value;
+            document.getElementById("threshold_val").innerHTML = "<b>Threshold</b> <br> "+this.value;
+            updateParam(this.value, thresholdSlider, compressor.threshold); 
+        }
+    };
     
     attackSlider.oninput = function() {
-        attackVal.innerHTML = this.value;
-        document.getElementById("attack_val").innerHTML = "<b>Attack</b> <br> "+this.value;
-        updateParam(this.value, attackSlider, compressor.attack);
+        if (compressActive === "true") {
+            attackVal.innerHTML = this.value;
+            document.getElementById("attack_val").innerHTML = "<b>Attack</b> <br> "+this.value;
+            updateParam(this.value, attackSlider, compressor.attack); 
+        }
     };
-    thresholdSlider.oninput = function() {
-        thresholdVal.innerHTML = this.value;
-        document.getElementById("threshold_val").innerHTML = "<b>Threshold</b> <br> "+this.value;
-        updateParam(this.value, thresholdSlider, compressor.threshold);
-    };
+    
     kneeSlider.oninput = function() {
-        kneeVal.innerHTML = this.value;
-        document.getElementById("knee_val").innerHTML = "<b>Knee</b> <br> "+this.value;
-        updateParam(this.value, kneeSlider, compressor.knee);
+        if (compressActive === "true") {
+            kneeVal.innerHTML = this.value;
+            document.getElementById("knee_val").innerHTML = "<b>Knee</b> <br> "+this.value;
+            updateParam(this.value, kneeSlider, compressor.knee);
+        }
     };
     ratioSlider.oninput = function() {
-        ratioVal.innerHTML = this.value;
-        document.getElementById("ratio_val").innerHTML = "<b>Ratio</b> <br> "+this.value;
+        if (compressActive === "true") {
+            ratioVal.innerHTML = this.value;
+            document.getElementById("ratio_val").innerHTML = "<b>Ratio</b> <br> "+this.value;
         updateParam(this.value, ratioSlider, compressor.ratio);
+        }
     };
     releaseSlider.oninput = function() {
-        releaseVal.innerHTML = this.value;
-        document.getElementById("release_val").innerHTML = "<b>Release</b> <br> "+this.value;
-        updateParam(this.value, releaseSlider, compressor.release);
+        if (compressActive === "true") {
+            releaseVal.innerHTML = this.value;
+            document.getElementById("release_val").innerHTML = "<b>Release</b> <br> "+this.value;
+            updateParam(this.value, releaseSlider, compressor.release);
+        }
     };
 
         /**
@@ -231,7 +279,7 @@ if (!context) {
         function updateParam(val, slider, param) {
             // const active = button.getAttribute("data-active");
             // only change param val if compressor is active
-            if (compressButton.getAttribute("data-active") === "true") {
+            if (compressActive === "true") {
                 // param.setValueAtTime(button.innerHTML, context.currentTime);
                 param.setValueAtTime(val, context.currentTime);
                 console.log(slider.id, ": ", param.value);

@@ -172,6 +172,51 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+.dropbtn {
+  border-radius: 3px;
+  background-color: rgb(65, 195, 80);
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  border-radius: 3px;
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content p {
+  border-radius: 3px;
+  margin-bottom: 0%;
+  color: black;
+  padding-left: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  display: block;
+}
+
+.dropdown-content p:hover {
+  background-color: #ddd;
+  }
+
+.dropdown:hover .dropdown-content {
+  display: block;
+  cursor: pointer;
+}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
 /* hint button */
 #hintButton {
   border-style: none;
@@ -179,13 +224,7 @@ input:checked + .slider:before {
   width: 157px;
   height: 49px;
   float: right;
-  color: black;
-  /* left: 1217px;
-  right: auto; */
-  /* align with edge of effect bk */ 
-  /* top: 484px; */
-  /* margin-right: 10%; */
-
+  color: white;
 }
 
 /* check button */
@@ -199,7 +238,6 @@ input:checked + .slider:before {
 }
 
 
-
 #effect-bk {
   width: 977px;
   min-width: 977px;
@@ -210,17 +248,14 @@ input:checked + .slider:before {
   margin-left: 3px;
   display: flex;
   background: rgb(229, 225, 233);
+  border-radius: 6px;
+  filter: brightness(0.5);
   /* border: 3px solid rgb(91, 91, 91); */
   /* background: rgb(204, 204, 204); */
-  border-radius: 6px;
+  /* background-color: gray; */
 
 }
 
-.knobBox {
-  width:fit-content;
-  height: fit-content;
-  /* background-color: yellow; */
-}
 
 .container-fluid {
   display: flex;

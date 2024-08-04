@@ -93,6 +93,16 @@
     <!-- TODO: loop button -->
     <div class="container row" >
       <button class="btn btn-primary" data-active="false" id="compressButton">Enable compression</button>
+      <div class="dropdown" id="efxSelection">
+        <button class="dropbtn">Parameter Selection</button>
+        <div class="dropdown-content">
+          <p>Threshold</p>
+          <p>Attack</p>
+          <p>Knee</p>
+          <p>Ratio</p>
+          <p>Release</p>
+        </div>
+      </div>
       <button type="button" id="hintButton" class="btn btn-primary">hint</button>
     </div>
     <div class="container" id="effect-bk">
@@ -109,35 +119,36 @@
         <div class="efx-col" style="background-color: rgb(131, 219, 141);">
           <label for="threshold" id="threshold_val"><b>Threshold</b> <br>-24</label>
           <!-- <div class="label-val" >-24</div> -->
-          <input type="range" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" oninput="threshold_val.innerText = 'Threshold' + '\n'+ this.value">
+          <input type="range" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" oninput="">
+          <!-- <input type="range" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" oninput="sliderValChange()"> -->
           
         </div>
         <!-- ATTACK SECTION -->
         <div class="efx-col" style="background-color: rgb(251, 167, 33);">
           <label for="attack" id="attack_val"><b>Attack</b> <br>0.003</label>
           <!-- <p id="attack_val">value: 0.003</p> -->
-          <input type="range"  id="attack"  name="attack" min="0.0" max="1.0" step=".05" value="0.003" class="efx-slider" oninput="attack_val.innerHTML = <b>'Attack'</b> <br></br> this.value">
+          <input type="range"  id="attack"  name="attack" min="0.0" max="1.0" step=".05" value="0.003" class="efx-slider" oninput="">
           
         </div>
         <!-- KNEE SECTION -->
         <div class="efx-col" style="background-color: rgb(70, 172, 255);">
           <label for="knee"id="knee_val"><b>Knee</b> <br>30</label>
           <!-- <p id="knee_val">value: 30</p> -->
-          <input type="range"  id="knee" name="knee" min="0.0" max="40.0" step="1" value="30" class="efx-slider"oninput="knee_val.innerHTML = <b>'Knee'</b> <br> this.value">
+          <input type="range"  id="knee" name="knee" min="0.0" max="40.0" step="1" value="30" class="efx-slider"oninput="">
           
         </div> 
         <!-- RATIO SECTION --> 
         <div class="efx-col" style="background-color: rgb(255, 162, 162);">
           <label for="ratio"id="ratio_val"><b>Ratio</b><br> 12</label>
           <!-- <p id="ratio_val">value: 12</p> -->
-          <input type="range" id="ratio" name="ratio" min="1.0" max="20.0" step="1" value="12" class="efx-slider" oninput="ratio_val.innerHTML = <b>'Ratio'</b> <br></br> this.value">
+          <input type="range" id="ratio" name="ratio" min="1.0" max="20.0" step="1" value="12" class="efx-slider" oninput="">
           
         </div>
         <!-- RELEASE SECTION -->
         <div class="efx-col" style="background-color: rgb(255, 184, 118);">
           <label for="release"id="release_val"><b>Release</b><br>.25</label>
           <!-- <p id="release_val">value: .25</p> -->
-          <input type="range"   id="release" name="release" min="0.0" max="1.0" step=".05" value=".25" class="efx-slider" oninput="release_val.innerHTML = <b>'Release'</b> <br></br> this.value">
+          <input type="range"   id="release" name="release" min="0.0" max="1.0" step=".05" value=".25" class="efx-slider" oninput="">
           
         </div> 
         <!-- OUTPUT VOL SECTION -->
