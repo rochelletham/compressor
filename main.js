@@ -31,11 +31,7 @@ thresholdSlider.innerHTML = thresholdVal;
 ratioSlider.innerHTML = ratioVal;
 releaseSlider.innerHTML = releaseVal;
 
-// SLIDER_IDS.forEach(slider_id => {   
-//     if (slider_id) {
-//         slider_id.disabled = true;
-//     }
-// });
+var compressActive = compressButton.getAttribute("data-active");
 
 let context;
 
@@ -169,15 +165,12 @@ if (!context) {
     outputSplitter.connect(outputRtAnalyser, 1);
     
     const effect_bk = document.getElementById("effect-bk");
-    var compressActive = compressButton.getAttribute("data-active");
-
+    
     compressButton.onclick = () => {
         if (compressActive === "false") {
             // UI handling
             effect_bk.style.filter = `brightness(1)`;
 
-            compressActive = "true";
-            compressButton.setAttribute("data-active", compressActive);
             SLIDER_IDS.forEach(slider_id => {   
                 if (slider_id) {
                     slider_id.disabled = false;
@@ -194,6 +187,8 @@ if (!context) {
             outputSplitter.connect(outputRtAnalyser,1);
             outputLtAnalyser.connect(context.destination);
             outputRtAnalyser.connect(context.destination);
+            compressActive = "true";
+            compressButton.setAttribute("data-active", compressActive);
             
         } else if (compressActive === "true") {
             // UI handling
@@ -203,8 +198,6 @@ if (!context) {
                 outputRtMeter.value = 0;
             }
             
-            compressActive = "false";
-            compressButton.setAttribute("data-active", compressActive);
             SLIDER_IDS.forEach(slider_id => {   
                 if (slider_id) {
                     slider_id.disabled = true;
@@ -218,76 +211,52 @@ if (!context) {
             outputRtAnalyser.disconnect(context.destination);
             inputLtAnalyser.connect(context.destination);
             inputRtAnalyser.connect(context.destination);
+            compressActive = "false";
+            compressButton.setAttribute("data-active", compressActive);
+            
         }
     };
-    
-    // sliderChangeVal(paramName, val) {
-
-    // }
-    
 
     thresholdSlider.oninput = function() {
-        if (compressActive === "true") {
-            thresholdVal.innerHTML = this.value;
-            document.getElementById("threshold_val").innerHTML = "<b>Threshold</b> <br> "+this.value;
-            updateParam(this.value, thresholdSlider, compressor.threshold); 
-        }
+        updateParam(this.value, thresholdSlider, "Threshold", compressor.threshold);
     };
     
     attackSlider.oninput = function() {
-        if (compressActive === "true") {
-            attackVal.innerHTML = this.value;
-            document.getElementById("attack_val").innerHTML = "<b>Attack</b> <br> "+this.value;
-            updateParam(this.value, attackSlider, compressor.attack); 
-        }
+        updateParam(this.value, attackSlider, "Attack", compressor.attack);
     };
     
     kneeSlider.oninput = function() {
-        if (compressActive === "true") {
-            kneeVal.innerHTML = this.value;
-            document.getElementById("knee_val").innerHTML = "<b>Knee</b> <br> "+this.value;
-            updateParam(this.value, kneeSlider, compressor.knee);
-        }
-    };
-    ratioSlider.oninput = function() {
-        if (compressActive === "true") {
-            ratioVal.innerHTML = this.value;
-            document.getElementById("ratio_val").innerHTML = "<b>Ratio</b> <br> "+this.value;
-        updateParam(this.value, ratioSlider, compressor.ratio);
-        }
-    };
-    releaseSlider.oninput = function() {
-        if (compressActive === "true") {
-            releaseVal.innerHTML = this.value;
-            document.getElementById("release_val").innerHTML = "<b>Release</b> <br> "+this.value;
-            updateParam(this.value, releaseSlider, compressor.release);
-        }
+        updateParam(this.value, kneeSlider, "Knee", compressor.knee);
     };
 
-        /**
-         * @param {float} val - the new value to be assigned to parameter
-         * @param {object} slider - slider for specific parameter
-         * @param {object} param - compressor parameter
-         * ranges & defaults for each parameter:
-         * threshold: [-100,0], -24
-         * knee: [0, 40], 30
-         * ratio: [1, 20], 12
-         * attack: [0,1], 0.003
-         * release: [0,1], 0.25
-         * 
-         */
-        function updateParam(val, slider, param) {
-            // const active = button.getAttribute("data-active");
-            // only change param val if compressor is active
-            if (compressActive === "true") {
-                // param.setValueAtTime(button.innerHTML, context.currentTime);
-                param.setValueAtTime(val, context.currentTime);
-                console.log(slider.id, ": ", param.value);
-                // }
-            }
-        };
-        function meterParam(val, meter) {
-            meter.setValueAtTime(val, context.currentTime);
+    ratioSlider.oninput = function() {
+        updateParam(this.value, ratioSlider, "Ratio", compressor.ratio);
+    };
+
+    releaseSlider.oninput = function() {
+        updateParam(this.value, releaseSlider, "Release", compressor.release);
+    };
+
+    /**
+     * @param {float} val - the new value to be assigned to parameter
+     * @param {object} slider - slider (id) for specific parameter
+     * @param {object} param - parameter name (displayed in UI)
+     * @param {object} param - compressor parameter
+     * ranges & defaults for each parameter:
+     * threshold: [-100,0], -24
+     * knee: [0, 40], 30
+     * ratio: [1, 20], 12
+     * attack: [0,1], 0.003
+     * release: [0,1], 0.25
+     * 
+     */
+    function updateParam(val, slider, paramName, param) {
+        // only change param val if compressor is active
+        if (compressActive === "true") {
+            slider.innerHTML = `<b>${paramName}</b> <br> `+ val;
+            param.setValueAtTime(val, context.currentTime);
+            console.log(slider.id, ": ", param.value);
         }
+    };
 }
 });
