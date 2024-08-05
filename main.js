@@ -11,11 +11,6 @@ const pre = document.querySelector("pre");
 //  was used for inital testing
 const compressButton = document.querySelector('#compressButton');
 
-const inputLtMeter = document.getElementById("input-vol-meter-left")
-const inputRtMeter = document.getElementById("input-vol-meter-rt")
-const outputLtMeter = document.getElementById("output-vol-meter-left")
-const outputRtMeter = document.getElementById("output-vol-meter-rt")
-
 const attackSlider = document.getElementById("attack");
 const thresholdSlider = document.getElementById("threshold");
 const kneeSlider = document.getElementById("knee");
@@ -108,7 +103,13 @@ if (!context) {
     const ltOutData = new Float32Array(ltOutBufferLen);
     const rtOutData = new Float32Array(rtOutBufferLen);
     
+    const inputLtMeter = document.getElementById("input-vol-meter-lt");
+    const inputRtMeter = document.getElementById("input-vol-meter-rt");
+    const outputLtMeter = document.getElementById("output-vol-meter-lt");
+    const outputRtMeter = document.getElementById("output-vol-meter-rt");
+
     const onInputFrame = () => {
+        
         inputLtAnalyser.getFloatTimeDomainData(ltData);
         inputRtAnalyser.getFloatTimeDomainData(rtData);
         let ltSumSquares = 0.0;
@@ -119,13 +120,11 @@ if (!context) {
         for (const amplitude of rtData) { 
             rtSumSquares += Math.pow(amplitude,2); 
         }
-        if (inputLtMeter && inputRtMeter) { 
+        if (ltSumSquares > 0) {
             inputLtMeter.value = Math.sqrt(ltSumSquares / ltData.length) * 3; // * 2
             inputRtMeter.value = Math.sqrt(rtSumSquares / rtData.length) * 3; // * 2
         }
-        // after compressor applied
-        const active = compressButton.getAttribute("data-active");
-        if (active === "true") {
+        if (compressActive === "true") {
             outputLtAnalyser.getFloatTimeDomainData(ltOutData);
             outputRtAnalyser.getFloatTimeDomainData(rtOutData);
             let ltOutSumSquares = 0.0;
@@ -170,9 +169,9 @@ if (!context) {
     outputSplitter.connect(outputRtAnalyser, 1);
     
     const effect_bk = document.getElementById("effect-bk");
-    let compressActive = compressButton.getAttribute("data-active");
+    var compressActive = compressButton.getAttribute("data-active");
+
     compressButton.onclick = () => {
-        compressActive = compressButton.getAttribute("data-active");
         if (compressActive === "false") {
             // UI handling
             effect_bk.style.filter = `brightness(1)`;
@@ -203,6 +202,7 @@ if (!context) {
                 outputLtMeter.value = 0;
                 outputRtMeter.value = 0;
             }
+            
             compressActive = "false";
             compressButton.setAttribute("data-active", compressActive);
             SLIDER_IDS.forEach(slider_id => {   
