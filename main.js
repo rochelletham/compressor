@@ -31,6 +31,8 @@ thresholdSlider.innerHTML = thresholdVal;
 ratioSlider.innerHTML = ratioVal;
 releaseSlider.innerHTML = releaseVal;
 
+
+
 var compressActive = compressButton.getAttribute("data-active");
 
 let context;
@@ -43,7 +45,7 @@ checkButton.onclick = function(){
 };
 
 // only will run audio context code when input audio is in play state
-input.addEventListener("play", () => {
+// input.addEventListener("play", () => {
     // https://webaudio.github.io/web-audio-api/#DynamicsCompressorNode
     // https://developer.mozilla.org/en-US/docs/Web/API/DynamicsCompressorNode/DynamicsCompressorNode
     // var thresholdVal = -24; 
@@ -239,8 +241,8 @@ if (!context) {
 
     /**
      * @param {float} val - the new value to be assigned to parameter
-     * @param {object} slider - slider (id) for specific parameter
-     * @param {object} param - parameter name (displayed in UI)
+     * @param {object} slider_id - slider (id) for specific parameter
+     * @param {object} paramName - parameter name (displayed in UI)
      * @param {object} param - compressor parameter
      * ranges & defaults for each parameter:
      * threshold: [-100,0], -24
@@ -253,10 +255,11 @@ if (!context) {
     function updateParam(val, slider, paramName, param) {
         // only change param val if compressor is active
         if (compressActive === "true") {
-            slider.innerHTML = `<b>${paramName}</b> <br> `+ val;
+            document.getElementById(slider.id +'_val').textContent =val;
             param.setValueAtTime(val, context.currentTime);
-            console.log(slider.id, ": ", param.value);
+            console.log(slider.id, ": ", val);
+            
         }
     };
 }
-});
+// });
