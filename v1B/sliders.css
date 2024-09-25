@@ -28,6 +28,7 @@
 .efx-slider { 
   -webkit-appearance: none; 
   -moz-appearance: none; 
+  transform: rotate(180deg) scaleX(-1);
   writing-mode: vertical-lr;
   width: 18px;
   cursor: pointer;

@@ -256,6 +256,11 @@ input:checked + .slider:before {
 
 }
 
+.knobBox {
+  width:fit-content;
+  height: fit-content;
+  /* background-color: yellow; */
+}
 
 .container-fluid {
   display: flex;

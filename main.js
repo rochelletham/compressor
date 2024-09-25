@@ -1,3 +1,22 @@
+// load the parameter correct ranges
+const module = await import("./paramVals.json", {
+    with: { type: "json" },
+});;
+const Mode = {
+    YOURS: false,
+    EXPECTED: true,
+};
+// by default, the expected params will be set. 
+// when currMode = Yours, then switch compressor to use sliders' current vals
+var currMode = Mode.EXPECTED;
+
+// used for testing the checking system
+let thrldAns = getRandVal(-100, -50);
+let attackAns = getRandVal(0, 0.5);
+let kneeAns  = getRandVal(10, 20);
+let ratioAns = getRandVal(4, 13);
+let releaseAns = getRandVal(0, 0.5);
+
 const STEREO_CHANS = 2;
 // default initial values for parameters
 const THRESHVAL = -24;
@@ -6,43 +25,109 @@ const RATIOVAL = 12;
 const ATTACKVAL = 0.003;
 const RELVAL = 0.25;
 
-const input = document.querySelector("audio");
-const pre = document.querySelector("pre");
-//  was used for inital testing
-const compressButton = document.querySelector('#compressButton');
-
-const attackSlider = document.getElementById("attack");
-const thresholdSlider = document.getElementById("threshold");
-const kneeSlider = document.getElementById("knee");
-const ratioSlider = document.getElementById("ratio");
-const releaseSlider = document.getElementById("release");
-const SLIDER_IDS = [attackSlider, thresholdSlider, kneeSlider, ratioSlider, releaseSlider];
-
 var thresholdVal = THRESHVAL; 
 var kneeVal = KNEEVAL;
 var ratioVal = RATIOVAL;
 var attackVal = ATTACKVAL;
 var releaseVal = RELVAL;
 
-// setting the intial values
-attackSlider.innerHTML = attackVal;
-kneeSlider.innerHTML = kneeVal;
-thresholdSlider.innerHTML = thresholdVal;
-ratioSlider.innerHTML = ratioVal;
-releaseSlider.innerHTML = releaseVal;
+const THRESHOLD = "threshold";
+const ATTACK = "attack";
+const KNEE = "knee";
+const RATIO = "ratio";
+const RELEASE = "release";
 
+var attackSlider = document.getElementById("attack");
+var thresholdSlider = document.getElementById("threshold");
+var kneeSlider = document.getElementById("knee");
+var ratioSlider = document.getElementById("ratio");
+var releaseSlider = document.getElementById("release");
+var SLIDER_IDS = [thresholdSlider, attackSlider, kneeSlider, ratioSlider, releaseSlider];
+var PARAM_NAMES = [THRESHOLD, ATTACK,, KNEE, RATIO, RELEASE];
 
-
-var compressActive = compressButton.getAttribute("data-active");
+var compressActive = "false";
 
 let context;
+
+const input = document.querySelector("audio");
+const pre = document.querySelector("pre");
+//  was used for inital testing
+const compressButton = document.querySelector('#compressButton');
+// UI
+const effect_bk = document.getElementById("effect-bk");
+const toggleSwitch = document.getElementById("toggleSwitch");
+const toggleMode = document.getElementById("toggleMode");
+toggleSwitch.style.filter = `brightness(0.5)`;
+toggleMode.disabled = true;
+
+//********* set up **********//
+// for setting up the correct slider values
+// There will be a correct answer for each slider, and a correct range [correct-range, correct+range]
+// var range will decrease as difficulty increases
+var answerkey;
+function fetchParamData() {
+    fetch("./paramVals.json").then((res) => {
+        if (!res.ok) {
+            throw new Error(`HTTP error, Status: ${res.status}`);
+        }
+        answerkey = res.json();
+        return answerkey;
+    })
+    .catch((error) => {
+        console.error("Couldn't get data:", error);
+    })
+}
+
 
 hintButton.onclick = function(){
     alert("Clicked hint!");
 };
 checkButton.onclick = function(){
-    alert("clicked check!");
+    if (compressActive === "true") {
+        checkAnswer();
+    } else {
+        alert("Enable the compressor and do the exercise first before checking.");
+    }
 };
+
+// Generates a random value for the parameter's slider. 
+function getRandVal(min, max) {
+    let val = (Math.random() * (max - min) + min).toFixed(2);
+    return val;
+}
+// Checks if the user's answer is within the correct answer's range
+// correctRange is a size 2 array [min,max]
+
+function checkVal(slider, correctAns, correctRange) {
+    var val = parseFloat(slider.value);
+    var min = parseFloat(correctAns)+correctRange[0];
+    var max = parseFloat(correctAns)+correctRange[1];
+    console.log("user answer: " + val + "correct ans: " 
+        + correctAns + " correct range: [" + min + ", " + max + "]");
+    if ((val >= min) && (val <= max)) {
+        console.log("Correct! " + slider.id + 'slider value within range');
+        return true;
+    } else {
+        console.log(slider.id + 'slider val wrong, correct ans: '
+            + val + " " + min + ','+ max);
+        return false;
+    }
+}
+    //  * knee: [0, 40], 30
+    //  * ratio: [1, 20], 12
+    //  * attack: [0,1], 0.05
+    //  * release: [0,1], 0.25
+    //  * 
+// TODO: store correct ranges in var for easy access
+function checkAnswer() {
+    // drawCorrectAns(thresholdSlider);
+    checkVal(thresholdSlider, thrldAns, module.default.paramCorrectRanges[THRESHOLD]["beginner"]);
+    checkVal(attackSlider, attackAns, module.default.paramCorrectRanges[ATTACK]["beginner"]);
+    // checkVal(kneeSlider, module.default.paramCorrectRanges[KNEE]["beginner"]);
+    // checkVal(ratioSlider, module.default.paramCorrectRanges[RATIO]["beginner"]);
+    // checkVal(releaseSlider, module.default.paramCorrectRanges[RELEASE]["beginner"]);
+}
+
 
 // only will run audio context code when input audio is in play state
 // input.addEventListener("play", () => {
@@ -53,8 +138,17 @@ checkButton.onclick = function(){
     // var ratioVal = 12;
     // var attckVal = 0.003;
     // var releaseVal = 0.25;
+
 if (!context) {
-   context = new AudioContext();
+    fetchParamData();
+    context = new AudioContext();
+
+    // setting the intial values
+    attackSlider.innerHTML = attackVal;
+    kneeSlider.innerHTML = kneeVal;
+    thresholdSlider.innerHTML = thresholdVal;
+    ratioSlider.innerHTML = ratioVal;
+    releaseSlider.innerHTML = releaseVal;
 
     // Create a MediaElementAudioSourceNode
     // Feed the HTMLMediaElement into it
@@ -143,7 +237,6 @@ if (!context) {
     };
     window.requestAnimationFrame(onInputFrame);
 
-    
 
     // Create a compressor node
     const compressor = new DynamicsCompressorNode(context, {
@@ -166,13 +259,15 @@ if (!context) {
     outputSplitter.connect(outputLtAnalyser, 0);
     outputSplitter.connect(outputRtAnalyser, 1);
     
-    const effect_bk = document.getElementById("effect-bk");
     
     compressButton.onclick = () => {
         if (compressActive === "false") {
             // UI handling
             effect_bk.style.filter = `brightness(1)`;
+            toggleSwitch.style.filter = `brightness(1)`;
+            toggleMode.disabled = false;
 
+            console.log(toggleMode.disabled);
             SLIDER_IDS.forEach(slider_id => {   
                 if (slider_id) {
                     slider_id.disabled = false;
@@ -193,8 +288,11 @@ if (!context) {
             compressButton.setAttribute("data-active", compressActive);
             
         } else if (compressActive === "true") {
+            toggleMode.disabled = true;
             // UI handling
             effect_bk.style.filter = `brightness(0.5)`;
+            toggleSwitch.style.filter = `brightness(0.5)`;
+            
             if (outputLtMeter && outputRtMeter) {
                 outputLtMeter.value = 0;
                 outputRtMeter.value = 0;
@@ -216,6 +314,25 @@ if (!context) {
             compressActive = "false";
             compressButton.setAttribute("data-active", compressActive);
             
+        }
+    };
+    toggleMode.onclick = function() {
+        // play audio with expected params
+        if (toggleMode.checked == Mode.EXPECTED) {
+            console.log("setting compressor params to expected");
+            compressor.threshold.setValueAtTime(thrldAns, context.currentTime);
+            compressor.attack.setValueAtTime(ATTACKVAL, context.currentTime);
+            compressor.knee.setValueAtTime(KNEEVAL, context.currentTime);
+            compressor.ratio.setValueAtTime(RATIOVAL, context.currentTime);
+            compressor.release.setValueAtTime(RELVAL, context.currentTime);   
+        } 
+        // play audio with user's current parameters shown by sliders
+        else {
+            compressor.threshold.setValueAtTime(thresholdSlider.value, context.currentTime);
+            compressor.attack.setValueAtTime(attackSlider.value, context.currentTime);
+            compressor.knee.setValueAtTime(kneeSlider.value, context.currentTime);
+            compressor.ratio.setValueAtTime(ratioSlider.value, context.currentTime);
+            compressor.release.setValueAtTime(releaseSlider.value, context.currentTime);  
         }
     };
 
@@ -255,10 +372,9 @@ if (!context) {
     function updateParam(val, slider, paramName, param) {
         // only change param val if compressor is active
         if (compressActive === "true") {
-            document.getElementById(slider.id +'_val').textContent =val;
+            document.getElementById(slider.id +'_val').textContent = val;
             param.setValueAtTime(val, context.currentTime);
-            console.log(slider.id, ": ", val);
-            
+            // console.log(slider.id, ": ", val);
         }
     };
 }

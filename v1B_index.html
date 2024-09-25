@@ -19,7 +19,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
-  <script type= "text/javascript" defer src="main.js"></script>
+  <script type="application/json" src="paramVals.json"></script>
+  <!-- <script type= "text/javascript" src="paramAns.js"></script>   -->
+  <script type="module" defer src="main.js"></script>
   
   <title>Compressor, v1B</title>
   <link rel="stylesheet" href="v1B/style.css"/>
@@ -58,7 +60,7 @@
     </p>
     <div class="collapse" id="collapseExample">
       <div class="card card-body" style="width: 75%; margin-bottom: 15px;">
-        Change the slider parameters to match the input audio with the expected audio! When you're done changing the parameters, feel free to click the check 
+        Change the slider parameters to match the input audio with the expected audio! When you're done changing the parameters, feel free to click the check button 
         to review your submission. 
         <br><br>
         <u><b>Compressor Guidelines</u></b>
@@ -84,8 +86,8 @@
     <!-- Yours toggle Expected -->
     <div class="d-flex flex=row; margin-top: 10px; " style="text-align: center;">
       <h6 style="font-weight: normal;margin-top: 18px; " >Yours</h6>
-      <label class="switch" style="margin:10px;" >
-        <input type="checkbox" style="max-width: max-content; ">
+      <label id="toggleSwitch" class="switch" style="margin:10px;" >
+        <input id="toggleMode" type="checkbox" style="max-width: max-content; ">
         <span class="slider round"></span>
       </label>
       <h6 style="margin-right: 10px; margin-top: 18px; font-weight: normal;">Expected</h6>
@@ -120,34 +122,29 @@
           <label for="threshold" ><b>Threshold</b><br><a id="threshold_val">-24</a></label>
           <!-- <div class="label-val" >-24</div> -->
           <input type="range" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" >
-          <!-- <input type="range" id="threshold" name="threshold" min="-100.0" max="0.0" step="1.0" value="-24" class="efx-slider" oninput="sliderValChange()"> -->
           
         </div>
         <!-- ATTACK SECTION -->
         <div class="efx-col" style="background-color: rgb(251, 167, 33);">
-          <label for="attack"><b>Attack</b><br><a id="attack_val">.003</a></label>
-          <!-- <p id="attack_val">value: 0.003</p> -->
+          <label for="attack"><b>Attack</b><br><a id="attack_val">0.05</a></label>
           <input type="range"  id="attack"  name="attack" min="0.0" max="1.0" step=".05" value="0.003" class="efx-slider" >
           
         </div>
         <!-- KNEE SECTION -->
         <div class="efx-col" style="background-color: rgb(70, 172, 255);">
           <label for="knee"><b>Knee</b><br><a id="knee_val">30</a></label>
-          <!-- <p id="knee_val">value: 30</p> -->
           <input type="range"  id="knee" name="knee" min="0.0" max="40.0" step="1" value="30" class="efx-slider">
           
         </div> 
         <!-- RATIO SECTION --> 
         <div class="efx-col" style="background-color: rgb(255, 162, 162);">
           <label for="ratio"><b>Ratio</b><br><a id="ratio_val">12</a></label>
-          <!-- <p id="ratio_val">value: 12</p> -->
           <input type="range" id="ratio" name="ratio" min="1.0" max="20.0" step="1" value="12" class="efx-slider" >
           
         </div>
         <!-- RELEASE SECTION -->
         <div class="efx-col" style="background-color: rgb(255, 184, 118);">
           <label for="release"><b>Release</b><br><a id="release_val">.25</a></label>
-          <!-- <p id="release_val">value: .25</p> -->
           <input type="range" id="release" name="release" min="0.0" max="1.0" step=".05" value=".25" class="efx-slider">
           
         </div> 
