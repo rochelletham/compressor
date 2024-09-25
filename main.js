@@ -142,7 +142,7 @@ function checkAnswer() {
 if (!context) {
     fetchParamData();
     context = new AudioContext();
-
+    
     // setting the intial values
     attackSlider.innerHTML = attackVal;
     kneeSlider.innerHTML = kneeVal;
@@ -261,6 +261,7 @@ if (!context) {
     
     
     compressButton.onclick = () => {
+        context.resume();
         if (compressActive === "false") {
             // UI handling
             effect_bk.style.filter = `brightness(1)`;
