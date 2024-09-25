@@ -100,8 +100,8 @@ function getRandVal(min, max) {
 
 function checkVal(slider, correctAns, correctRange) {
     var val = parseFloat(slider.value);
-    var min = parseFloat(correctAns)+correctRange[0];
-    var max = parseFloat(correctAns)+correctRange[1];
+    var min = parseFloat(correctAns)+correctRange[0].toFixed(2);
+    var max = (parseFloat(correctAns)+correctRange[1]).toFixed(2);
     console.log("user answer: " + val + ", correct ans: " 
         + correctAns + " correct range: [" + min + ", " + max + "]");
     if ((val >= min) && (val <= max)) {
