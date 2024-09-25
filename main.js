@@ -102,7 +102,7 @@ function checkVal(slider, correctAns, correctRange) {
     var val = parseFloat(slider.value);
     var min = parseFloat(correctAns)+correctRange[0];
     var max = parseFloat(correctAns)+correctRange[1];
-    console.log("user answer: " + val + "correct ans: " 
+    console.log("user answer: " + val + ", correct ans: " 
         + correctAns + " correct range: [" + min + ", " + max + "]");
     if ((val >= min) && (val <= max)) {
         console.log("Correct! " + slider.id + 'slider value within range');
@@ -268,7 +268,7 @@ if (!context) {
             toggleSwitch.style.filter = `brightness(1)`;
             toggleMode.disabled = false;
 
-            console.log(toggleMode.disabled);
+            console.log("toggle is disabled: " + toggleMode.disabled);
             SLIDER_IDS.forEach(slider_id => {   
                 if (slider_id) {
                     slider_id.disabled = false;
@@ -320,15 +320,17 @@ if (!context) {
     toggleMode.onclick = function() {
         // play audio with expected params
         if (toggleMode.checked == Mode.EXPECTED) {
+            currMode = Mode.EXPECTED;
             console.log("setting compressor params to expected");
             compressor.threshold.setValueAtTime(thrldAns, context.currentTime);
-            compressor.attack.setValueAtTime(ATTACKVAL, context.currentTime);
+            compressor.attack.setValueAtTime(attackAns, context.currentTime);
             compressor.knee.setValueAtTime(KNEEVAL, context.currentTime);
             compressor.ratio.setValueAtTime(RATIOVAL, context.currentTime);
             compressor.release.setValueAtTime(RELVAL, context.currentTime);   
         } 
         // play audio with user's current parameters shown by sliders
         else {
+            currMode = Mode.YOURS;
             compressor.threshold.setValueAtTime(thresholdSlider.value, context.currentTime);
             compressor.attack.setValueAtTime(attackSlider.value, context.currentTime);
             compressor.knee.setValueAtTime(kneeSlider.value, context.currentTime);
@@ -338,23 +340,28 @@ if (!context) {
     };
 
     thresholdSlider.oninput = function() {
-        updateParam(this.value, thresholdSlider, "Threshold", compressor.threshold);
+        if (currMode == Mode.YOURS) 
+            updateParam(this.value, thresholdSlider, "Threshold", compressor.threshold);
     };
     
     attackSlider.oninput = function() {
-        updateParam(this.value, attackSlider, "Attack", compressor.attack);
+        if (currMode == Mode.YOURS) 
+            updateParam(this.value, attackSlider, "Attack", compressor.attack);
     };
     
     kneeSlider.oninput = function() {
-        updateParam(this.value, kneeSlider, "Knee", compressor.knee);
+        if (currMode == Mode.YOURS) 
+            updateParam(this.value, kneeSlider, "Knee", compressor.knee);
     };
 
     ratioSlider.oninput = function() {
-        updateParam(this.value, ratioSlider, "Ratio", compressor.ratio);
+        if (currMode == Mode.YOURS) 
+            updateParam(this.value, ratioSlider, "Ratio", compressor.ratio);
     };
 
     releaseSlider.oninput = function() {
-        updateParam(this.value, releaseSlider, "Release", compressor.release);
+        if (currMode == Mode.YOURS) 
+            updateParam(this.value, releaseSlider, "Release", compressor.release);
     };
 
     /**
